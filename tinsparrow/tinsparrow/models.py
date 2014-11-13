@@ -3,21 +3,8 @@ import os
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from beets.mediafile import MediaFile
 from mutagen.mp3 import MP3
-
-
-TYPES = {
-    'mp3':  'MP3',
-    # 'aac':  'AAC',
-    # 'alac':  'ALAC',
-    # 'ogg':  'OGG',
-    # 'opus': 'Opus',
-    # 'flac': 'FLAC',
-    # 'ape':  'APE',
-    # 'wv':   'WavPack',
-    # 'mpc':  'Musepack',
-    # 'asf':  'Windows Media',
-}
 
 
 class Artist(models.Model):
@@ -84,11 +71,12 @@ class Library(models.Model):
             for this_file in files:
                 if this_file.endswith('.mp3'):
                     print "Adding this file: {}".format(this_file)
-                    song_file = MP3(os.path.join(root, this_file))
-                    print song_file.info.length, song_file.info.bitrate
+                    song_file = MediaFile(os.path.join(root, this_file))
+                    artist, artist_created = Artist.objects.get_or_create(name=song_file.artist)
+                    album, album_created = Album.objects.get_or_create(artist=artist, title=song_file.album, year=song_file.year)
+                    song, song_created = Song.objects.get_or_create(path=os.path.join(root, this_file), defaults={'album': album})
                 else:
                     print "Not Adding this file: {}".format(os.path.join(root, this_file))
-
 
     def __unicode__(self):
         return self.name
@@ -98,7 +86,7 @@ class Library(models.Model):
         verbose_name_plural = _("libraries")
 
 
-class LibraryFile(models.Model):
+class Song(models.Model):
     library = models.ForeignKey(
         Library,
         related_name='library',
@@ -110,46 +98,17 @@ class LibraryFile(models.Model):
         blank=True,
         help_text=_("The path of that contains the file."),
     )
-    name = models.CharField(
+    filename = models.CharField(
         _('name'),
         max_length=255,
         default='',
         blank=True,
         help_text=_("The name of the file."),
     )
-    size = models.IntegerField(
-        _('size'),
-        help_text=_("The size of the file in bytes.")
-    )
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        ordering = ('name',)
-        verbose_name = _("file")
-        verbose_name_plural = _("files")
-
-# class SongFile(File):
-#     length,
-#     bitrate,
-#     channels,
-#     sample_rate,
-#     leveling,
-#     get_artist_from_file()
-#     get_album_from_file()
-
-class Song(models.Model):
     album = models.ForeignKey(
         Album,
         _('album'),
         related_name='album',
-    )
-    file = models.ForeignKey(
-        LibraryFile,
-        blank=True,
-        null=True,
-        related_name='file',
     )
     title = models.CharField(
         _('title'),
@@ -157,6 +116,11 @@ class Song(models.Model):
         default='',
         blank=True,
         help_text=_("The title of the song."),
+    )
+    size = models.IntegerField(
+        _('size'),
+        default=0,
+        help_text=_("The size of the file in bytes.")
     )
 
     def __unicode__(self):
