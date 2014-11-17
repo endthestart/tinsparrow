@@ -1,18 +1,58 @@
-import os
+import logging
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from beets.mediafile import MediaFile
-from mutagen.mp3 import MP3
+log = logging.getLogger(__name__)
+
+USER_MODULE_PATH = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
+
+
+class Library(models.Model):
+    user = models.ForeignKey(
+        USER_MODULE_PATH,
+        blank=True,
+        null=True,
+    )
+    name = models.CharField(
+        _('name'),
+        max_length=255,
+        help_text=_("The name of the library."),
+    )
+    path = models.CharField(
+        _('path'),
+        max_length=255,
+        help_text=_("The absolute path of the library."),
+    )
+
+    @property
+    def songs(self):
+        return [library_song.song for library_song in self.librarysong_set.all()]
+
+    @property
+    def albums(self):
+        return Album.objects.filter(songs__in=self.songs)
+
+    @property
+    def artists(self):
+        return Artist.objects.filter(songs__in=self.songs)
+
+
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("library")
+        verbose_name_plural = _("libraries")
 
 
 class Artist(models.Model):
     name = models.CharField(
         _('name'),
         max_length=255,
-        default='',
-        blank=True,
+        unique=True,
         help_text=_("The name of the artist."),
     )
 
@@ -30,7 +70,7 @@ class Album(models.Model):
         Artist,
         blank=True,
         null=True,
-        related_name='artist',
+        related_name='albums',
     )
     title = models.CharField(
         _('title'),
@@ -41,7 +81,9 @@ class Album(models.Model):
     )
     year = models.DateField(
         _('year'),
-
+        null=True,
+        blank=True,
+        help_text=_("The year the album was produced."),
     )
 
     def __unicode__(self):
@@ -53,44 +95,7 @@ class Album(models.Model):
         verbose_name_plural = _("albums")
 
 
-class Library(models.Model):
-    name = models.CharField(
-        _('name'),
-        max_length=255,
-        help_text=_("The name of the library."),
-    )
-    path = models.CharField(
-        _('path'),
-        help_text=_("The absolute path of the library."),
-    )
-
-    def find_media(self):
-        for root, dirs, files in os.walk(self.path):
-            path = os.path.relpath(root, self.path).split(os.sep)
-            print "Adding files from: {}".format(os.path.basename(root))
-            for this_file in files:
-                if this_file.endswith('.mp3'):
-                    print "Adding this file: {}".format(this_file)
-                    song_file = MediaFile(os.path.join(root, this_file))
-                    artist, artist_created = Artist.objects.get_or_create(name=song_file.artist)
-                    album, album_created = Album.objects.get_or_create(artist=artist, title=song_file.album, year=song_file.year)
-                    song, song_created = Song.objects.get_or_create(path=os.path.join(root, this_file), defaults={'album': album})
-                else:
-                    print "Not Adding this file: {}".format(os.path.join(root, this_file))
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("library")
-        verbose_name_plural = _("libraries")
-
-
 class Song(models.Model):
-    library = models.ForeignKey(
-        Library,
-        related_name='library',
-    )
     path = models.CharField(
         _('path'),
         max_length=255,
@@ -107,8 +112,15 @@ class Song(models.Model):
     )
     album = models.ForeignKey(
         Album,
-        _('album'),
-        related_name='album',
+        blank=True,
+        null=True,
+        related_name='songs',
+    )
+    artist = models.ForeignKey(
+        Artist,
+        blank=True,
+        null=True,
+        related_name='songs',
     )
     title = models.CharField(
         _('title'),
@@ -116,6 +128,11 @@ class Song(models.Model):
         default='',
         blank=True,
         help_text=_("The title of the song."),
+    )
+    track = models.PositiveIntegerField(
+        _('track'),
+        default='0',
+        help_text=_("The track of the song within the album."),
     )
     size = models.IntegerField(
         _('size'),
@@ -130,3 +147,20 @@ class Song(models.Model):
         ordering = ('title', )
         verbose_name = _('song')
         verbose_name_plural = _('songs')
+        unique_together = ('path', 'filename')
+
+
+class LibrarySong(models.Model):
+    library = models.ForeignKey(
+        Library,
+    )
+    song = models.ForeignKey(
+        Song,
+    )
+
+    def __unicode__(self):
+        return "{} - {}".format(self.library, self.song)
+
+    class Meta:
+        verbose_name = _("library")
+        verbose_name_plural = _("libraries")

@@ -1,24 +1,26 @@
 from django.conf.urls import patterns, include, url
-from django.conf.urls.static import static
 from django.conf import settings
-from django.views.generic import TemplateView
+
+from .views import HomeView, LibraryView, LibraryAlbumsView, ArtistView, AlbumView
+
+
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='base.html')),
-
-    # Examples:
-    # url(r'^$', 'tinsparrow.views.home', name='home'),
-    # url(r'^tinsparrow/', include('tinsparrow.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
+urlpatterns = patterns(
+    '',
+    url(r'^$', HomeView.as_view(), name='home'),
+    url(r'^library/', LibraryView.as_view(), name='library'),
+    url(r'^library/artists', LibraryView.as_view(), name='library_artists'),
+    url(r'^library/albums', LibraryAlbumsView.as_view(), name='library_albums'),
+    url(r'^library/songs', LibraryView.as_view(), name='library_songs'),
+    url(r'^library/artist/(?P<artist_id>\d+)/', ArtistView.as_view(), name='artist'),
+    url(r'^library/album/(?P<album_id>\d+)/', AlbumView.as_view(), name='album'),
     url(r'^admin/', include(admin.site.urls)),
+
 )
 
 # Uncomment the next line to serve media files in dev.
@@ -26,6 +28,7 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns += patterns('',
                             url(r'^__debug__/', include(debug_toolbar.urls)),
-                            )
+    )
