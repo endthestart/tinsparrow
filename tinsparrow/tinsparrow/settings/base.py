@@ -190,6 +190,8 @@ DJANGO_APPS = (
     # Admin panel and documentation:
     'django.contrib.admin',
     # 'django.contrib.admindocs',
+
+    'rest_framework',
 )
 
 # Apps specific for this project go here.
@@ -241,3 +243,9 @@ WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
 ########## END WSGI CONFIGURATION
 
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGINATE_BY': 10
+}

@@ -1,24 +1,21 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
+from django.contrib import admin
 
 from rest_framework import routers
 
-from .views import HomeView, ArtistViewSet
+from . import views
+
 
 router = routers.DefaultRouter()
-router.register(r'artists', ArtistViewSet)
+router.register(r'artists', views.ArtistViewSet)
 
-
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-
-admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^$', HomeView.as_view(), name='home'),
+    #url(r'^$', HomeView.as_view(), name='home'),
     url(r'^api/$', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^admin/', include(admin.site.urls)),
 
 )
