@@ -6,8 +6,8 @@ from django.views.generic import TemplateView
 
 from rest_framework import viewsets
 
-from .models import Artist, Queue, Song
-from .serializers import ArtistSerializer
+from .models import Artist, Album, Queue, Song
+from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
 
 
 def songfile(request, song_id):
@@ -28,3 +28,14 @@ class HomeView(TemplateView):
 class ArtistViewSet(viewsets.ModelViewSet):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
+
+
+class AlbumViewSet(viewsets.ModelViewSet):
+    queryset = Album.objects.all()
+    serializer_class = AlbumSerializer
+
+
+class SongViewSet(viewsets.ModelViewSet):
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+
