@@ -9,45 +9,6 @@ log = logging.getLogger(__name__)
 USER_MODULE_PATH = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 
-class Library(models.Model):
-    user = models.ForeignKey(
-        USER_MODULE_PATH,
-        blank=True,
-        null=True,
-    )
-    name = models.CharField(
-        _('name'),
-        max_length=255,
-        help_text=_("The name of the library."),
-    )
-    path = models.CharField(
-        _('path'),
-        max_length=255,
-        help_text=_("The absolute path of the library."),
-    )
-
-    @property
-    def songs(self):
-        return [library_song.song for library_song in self.librarysong_set.all()]
-
-    @property
-    def albums(self):
-        return Album.objects.filter(songs__in=self.songs)
-
-    @property
-    def artists(self):
-        return Artist.objects.filter(songs__in=self.songs)
-
-
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("library")
-        verbose_name_plural = _("libraries")
-
-
 class Artist(models.Model):
     name = models.CharField(
         _('name'),
@@ -148,6 +109,47 @@ class Song(models.Model):
         verbose_name = _('song')
         verbose_name_plural = _('songs')
         unique_together = ('path', 'filename')
+
+
+class Library(models.Model):
+    user = models.ForeignKey(
+        USER_MODULE_PATH,
+        blank=True,
+        null=True,
+    )
+    name = models.CharField(
+        _('name'),
+        max_length=255,
+        help_text=_("The name of the library."),
+    )
+    path = models.CharField(
+        _('path'),
+        max_length=255,
+        help_text=_("The absolute path of the library."),
+    )
+    song = models.ManyToManyField(
+        Song,
+        through='LibrarySong',
+    )
+
+    @property
+    def songs(self):
+        return [library_song.song for library_song in self.librarysong_set.all()]
+
+    @property
+    def albums(self):
+        return Album.objects.filter(songs__in=self.songs)
+
+    @property
+    def artists(self):
+        return Artist.objects.filter(songs__in=self.songs)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("library")
+        verbose_name_plural = _("libraries")
 
 
 class LibrarySong(models.Model):
