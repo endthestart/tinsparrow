@@ -135,6 +135,7 @@ class Importer(object):
                         filename=os.path.split(media_file.path)[1],
                         defaults={
                             'album': album,
+                            'artist': artist,
                             'title': media_dict['title'],
                             'track': media_dict['track']
                         }
