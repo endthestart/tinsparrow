@@ -129,6 +129,7 @@ class Library(models.Model):
     )
     songs = models.ManyToManyField(
         Song,
+        blank=True,
     )
 
     @property

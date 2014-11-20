@@ -2,7 +2,7 @@ import logging
 import os
 
 from . import utils
-from .models import Artist, Album, Song, LibrarySong
+from .models import Artist, Album, Song
 
 from beets.mediafile import MediaFile, FileTypeError, UnreadableFileError
 
@@ -49,7 +49,6 @@ class Importer(object):
     #
     #     return likelies, consensus
 
-
     def find_media(self, library):
         if not os.path.isdir(library.path):
             log.warning("Unable to find directory: '%s'", library.path)
@@ -57,7 +56,6 @@ class Importer(object):
         for root, dirs, files in os.walk(library.path):
             if files:
                 log.info("This is most likely an album: '%s'", root)
-                album_path = os.path.relpath(root, library.path).split(os.sep)
                 items = [os.path.join(root, f) for f in files]
                 media_files = []
 
@@ -140,7 +138,5 @@ class Importer(object):
                             'track': media_dict['track']
                         }
                     )
-                    library_song, library_song_created = LibrarySong.objects.get_or_create(
-                        library=library,
-                        song=song
-                    )
+
+                    library.songs.add(song)
