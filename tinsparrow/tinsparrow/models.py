@@ -127,41 +127,20 @@ class Library(models.Model):
         max_length=255,
         help_text=_("The absolute path of the library."),
     )
-    song = models.ManyToManyField(
+    songs = models.ManyToManyField(
         Song,
-        through='LibrarySong',
     )
-
-    @property
-    def songs(self):
-        return [library_song.song for library_song in self.librarysong_set.all()]
 
     @property
     def albums(self):
-        return Album.objects.filter(songs__in=self.songs)
+        return Album.objects.filter(songs__in=self.songs).distinct()
 
     @property
     def artists(self):
-        return Artist.objects.filter(songs__in=self.songs)
+        return Artist.objects.filter(songs__in=self.songs).distinct()
 
     def __unicode__(self):
         return self.name
-
-    class Meta:
-        verbose_name = _("library")
-        verbose_name_plural = _("libraries")
-
-
-class LibrarySong(models.Model):
-    library = models.ForeignKey(
-        Library,
-    )
-    song = models.ForeignKey(
-        Song,
-    )
-
-    def __unicode__(self):
-        return "{} - {}".format(self.library, self.song)
 
     class Meta:
         verbose_name = _("library")
