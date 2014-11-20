@@ -1,9 +1,19 @@
+import os
+
+from django import http
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
 from rest_framework import viewsets
 
-from .models import Artist, Album, Song, Library
+from .models import Artist, Queue, Song
 from .serializers import ArtistSerializer
+
+
+def songfile(request, song_id):
+    song = get_object_or_404(Song, id=song_id)
+    song_data = open(os.path.join(song.path, song.filename)).read()
+    return http.HttpResponse(song_data, content_type='audio/m4a')
 
 
 class HomeView(TemplateView):
@@ -11,6 +21,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
+        context['queue'] = Queue.objects.get(user=self.request.user)
         return context
 
 

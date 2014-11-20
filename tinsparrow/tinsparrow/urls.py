@@ -3,19 +3,18 @@ from django.conf import settings
 from django.contrib import admin
 
 from rest_framework import routers
-
-from . import views
-
+from .views import ArtistViewSet, songfile
 
 router = routers.DefaultRouter()
-router.register(r'artists', views.ArtistViewSet)
+router.register(r'artists', ArtistViewSet)
 
 
 urlpatterns = patterns(
     '',
-    #url(r'^$', HomeView.as_view(), name='home'),
     url(r'^api/$', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
+
+    url(r'^song/(?P<song_id>\d+)', songfile, name='tinsparrow_song_file'),
     url(r'^admin/', include(admin.site.urls)),
 
 )

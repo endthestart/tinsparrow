@@ -5,6 +5,13 @@
     <title></title>
 </head>
 <body>
-HOME
+
+
+<audio controls preload="none">
+    {% with song=queue.songs.all.0 %}
+        <source src="{% url 'tinsparrow_song_file' song.id %}" type="audio/mp4">
+    {% endwith %}
+</audio>
+
 </body>
 </html>
