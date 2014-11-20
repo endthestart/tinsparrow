@@ -1,6 +1,9 @@
 from django.views.generic import TemplateView
 
+from rest_framework import viewsets
+
 from .models import Artist, Album, Song, Library
+from .serializers import ArtistSerializer
 
 
 class HomeView(TemplateView):
@@ -11,44 +14,6 @@ class HomeView(TemplateView):
         return context
 
 
-class LibraryView(TemplateView):
-    template_name = "tinsparrow/library.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(LibraryView, self).get_context_data(**kwargs)
-        libraries = Library.objects.all()
-        objects = Artist.objects.filter(library__in=libraries)
-        context['objects'] = objects
-        context['type'] = 'artists'
-        return context
-
-
-class LibraryAlbumsView(LibraryView):
-    def get_context_data(self, **kwargs):
-        context = super(LibraryView, self).get_context_data(**kwargs)
-        libraries = Library.objects.all()
-        objects = Album.objects.filter(library__in=libraries)
-        context['objects'] = objects
-        context['type'] = 'albums'
-
-
-class ArtistView(TemplateView):
-    template_name = "tinsparrow/library.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(LibraryView, self).get_context_data(**kwargs)
-        libraries = Library.objects.all()
-        artists = Artist.objects.filter(library__in=libraries)
-        context['artists'] = artists
-        return context
-
-
-class AlbumView(TemplateView):
-    template_name = "tinsparrow/library.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(LibraryView, self).get_context_data(**kwargs)
-        libraries = Library.objects.all()
-        artists = Artist.objects.filter(library__in=libraries)
-        context['artists'] = artists
-        return context
+class ArtistViewSet(viewsets.ModelViewSet):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer

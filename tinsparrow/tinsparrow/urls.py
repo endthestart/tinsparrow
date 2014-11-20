@@ -1,8 +1,12 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 
-from .views import HomeView, LibraryView, LibraryAlbumsView, ArtistView, AlbumView
+from rest_framework import routers
 
+from .views import HomeView, ArtistViewSet
+
+router = routers.DefaultRouter()
+router.register(r'artists', ArtistViewSet)
 
 
 # Uncomment the next two lines to enable the admin:
@@ -13,12 +17,8 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^$', HomeView.as_view(), name='home'),
-    url(r'^library/', LibraryView.as_view(), name='library'),
-    url(r'^library/artists', LibraryView.as_view(), name='library_artists'),
-    url(r'^library/albums', LibraryAlbumsView.as_view(), name='library_albums'),
-    url(r'^library/songs', LibraryView.as_view(), name='library_songs'),
-    url(r'^library/artist/(?P<artist_id>\d+)/', ArtistView.as_view(), name='artist'),
-    url(r'^library/album/(?P<album_id>\d+)/', AlbumView.as_view(), name='album'),
+    url(r'^api/$', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', include(admin.site.urls)),
 
 )
