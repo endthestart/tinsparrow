@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView
 
-from .models import Artist, Album, Song, Library
+from .models import Artist, Album, Library, Queue
 
 
 class HomeView(TemplateView):
@@ -8,6 +8,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
+        context['queue'] = Queue.objects.get(user=self.request.user)
         return context
 
 

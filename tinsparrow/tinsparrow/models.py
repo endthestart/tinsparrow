@@ -146,3 +146,15 @@ class Library(models.Model):
     class Meta:
         verbose_name = _("library")
         verbose_name_plural = _("libraries")
+
+
+class Queue(models.Model):
+    user = models.ForeignKey(
+        USER_MODULE_PATH
+    )
+    songs = models.ManyToManyField(
+        Song
+    )
+
+    def __unicode__(self):
+        return "{}'s Queue".format(self.user.username)
