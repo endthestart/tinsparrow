@@ -1,1 +1,8 @@
 /*! project specific CSS goes here. */
+.queue {
+    cursor: pointer;
+}
+
+.active {
+    font-weight: 700;
+}
