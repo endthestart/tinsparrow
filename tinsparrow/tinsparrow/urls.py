@@ -1,9 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 
-from .views import HomeView, LibraryView, LibraryAlbumsView, ArtistView, AlbumView
-
-
+from .views import HomeView, LibraryView, LibraryAlbumsView, ArtistView, AlbumView, songfile
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -19,6 +17,9 @@ urlpatterns = patterns(
     url(r'^library/songs', LibraryView.as_view(), name='library_songs'),
     url(r'^library/artist/(?P<artist_id>\d+)/', ArtistView.as_view(), name='artist'),
     url(r'^library/album/(?P<album_id>\d+)/', AlbumView.as_view(), name='album'),
+
+    url(r'^song/(?P<song_id>\d+)', songfile, name='tinsparrow_song_file'),
+
     url(r'^admin/', include(admin.site.urls)),
 
 )

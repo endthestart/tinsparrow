@@ -1,6 +1,17 @@
+import os
+
+from django import http
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
-from .models import Artist, Album, Library, Queue
+
+from .models import Artist, Album, Library, Queue, Song
+
+
+def songfile(request, song_id):
+    song = get_object_or_404(Song, id=song_id)
+    song_data = open(os.path.join(song.path, song.filename)).read()
+    return http.HttpResponse(song_data, content_type='audio/m4a')
 
 
 class HomeView(TemplateView):
