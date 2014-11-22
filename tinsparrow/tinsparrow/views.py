@@ -21,7 +21,15 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
-        context['queue'] = Queue.objects.get(user=self.request.user)
+        context['queue'] = Queue.objects.get_or_create(user=self.request.user)
+        return context
+
+
+class LibraryView(TemplateView):
+    template_name = "tinsparrow/library.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(LibraryView, self).get_context_data(**kwargs)
         return context
 
 

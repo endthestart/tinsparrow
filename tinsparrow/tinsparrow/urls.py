@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 
 from rest_framework import routers
-from .views import ArtistViewSet, AlbumViewSet, SongViewSet, songfile, HomeView
+from .views import ArtistViewSet, AlbumViewSet, LibraryView, SongViewSet, songfile, HomeView
 
 router = routers.DefaultRouter()
 router.register(r'artists', ArtistViewSet)
@@ -13,12 +13,13 @@ router.register(r'songs', SongViewSet)
 
 urlpatterns = patterns(
     '',
+    url(r'^$', HomeView.as_view(), name='tinsparrow_home'),
+    url(r'^library/', LibraryView.as_view(), name='library'),
     url(r'^api/', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^song/(?P<song_id>\d+)', songfile, name='tinsparrow_song_file'),
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'', HomeView.as_view(), name='tinsparrow_home'),
 )
 
 # Uncomment the next line to serve media files in dev.
