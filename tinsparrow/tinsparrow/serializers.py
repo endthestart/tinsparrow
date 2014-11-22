@@ -1,26 +1,34 @@
-from .models import Library, Artist, Album, Song
+from .models import Artist, Album, Song
 from rest_framework import serializers
 
 
-class SongSerializer(serializers.HyperlinkedModelSerializer):
-    artist = serializers.Field(source='artist.name')
-    album = serializers.Field(source='album.title')
-    artist_url = serializers.Field(source='artist')
-
-    class Meta:
-        model = Song
-        fields = ('url', 'artist', 'album', 'artist_url', 'title', )
-
-
-class AlbumSerializer(serializers.HyperlinkedModelSerializer):
-
-    class Meta:
-        model = Album
-        fields = ('url', 'artist', 'title', 'songs', 'tracks', )
-
-
 class ArtistSerializer(serializers.HyperlinkedModelSerializer):
+    albums = serializers.HyperlinkedIdentityField('albums', view_name='artistalbum-list')
+    songs = serializers.HyperlinkedIdentityField('songs', view_name='artistsong-list')
 
     class Meta:
         model = Artist
-        fields = ('url', 'name', 'albums', 'songs', )
+        fields = ('id', 'name', 'albums', 'songs', )
+
+
+class AlbumSerializer(serializers.ModelSerializer):
+    songs = serializers.HyperlinkedIdentityField('songs', view_name='albumsong-list')
+
+    class Meta:
+        model = Album
+        fields = ('id', 'artist', 'title', 'songs', )
+
+
+class SongSerializer(serializers.ModelSerializer):
+    artist = ArtistSerializer(required=False)
+    album = AlbumSerializer(required=False)
+
+    class Meta:
+        model = Song
+        fields = ('id', 'artist', 'album', 'title', )
+
+
+
+
+
+
