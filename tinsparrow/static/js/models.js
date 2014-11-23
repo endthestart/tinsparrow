@@ -54,6 +54,15 @@
         }
     });
 
+    app.models.Queue = BaseModel.extend({
+        fetchSongs: function () {
+            var songs = this.get('songs');
+            if (songs) {
+                app.queue_songs.fetch({url: songs, remove: false});
+            }
+        }
+    });
+
     app.collections.ready = $.getJSON(app.apiRoot);
     app.collections.ready.done(function (data) {
         app.collections.Artists = BaseCollection.extend({
@@ -73,6 +82,29 @@
             url: data.songs
         });
         app.songs = new app.collections.Songs();
+
+        app.collections.Queues = BaseCollection.extend({
+            model: app.models.Queue,
+            url: data.queue
+        });
+        app.queues = new app.collections.Queues();
+
+        app.collections.QueueSongs = BaseCollection.extend({
+            model: app.models.Song,
+            url: data.songs
+        });
+        app.queue_songs = new app.collections.QueueSongs();
+
+        //app.queues.fetch({
+        //    success: function() {
+        //        app.queue = app.queues.first();
+        //        app.queue.fetchSongs();
+        //    }
+        //});
+
+        var MyQueue = Backbone.Model.extend({urlRoot: '/queue'});
+        var myqueue = new MyQueue({id: 1});
+        console.log(myqueue);
     });
 
 })(jQuery, Backbone, _, app);

@@ -8,7 +8,7 @@ from .api import api_root
 from .api import ArtistList, ArtistDetail
 from .api import AlbumList, AlbumDetail, ArtistAlbumList
 from .api import SongList, SongDetail, ArtistSongList, AlbumSongList
-from .api import QueueDetail, QueueList
+from .api import QueueDetail, QueueList, QueueSongList
 
 
 artist_urls = patterns(
@@ -34,7 +34,8 @@ song_urls = patterns(
 
 queue_urls = patterns(
     '',
-    url(r'^/(?P<pk>\d+)/$', QueueDetail.as_view(), name='song-detail'),
+    url(r'^/(?P<user_id>\d+)/songs/$', QueueSongList.as_view(), name='queuesong-list'),
+    url(r'^/(?P<user_id>\d+)/$', QueueDetail.as_view(), name='queue-detail'),
     url(r'^/$', QueueList.as_view(), name='queue-list'),
 )
 

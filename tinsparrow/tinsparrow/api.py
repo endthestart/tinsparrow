@@ -23,7 +23,8 @@ def api_root(request, format=None):
     return Response({
         'artists': reverse('artist-list', request=request, format=format),
         'albums': reverse('album-list', request=request, format=format),
-        'songs': reverse('song-list', request=request, format=format)
+        'songs': reverse('song-list', request=request, format=format),
+        'queue': reverse('queue-list', request=request, format=format)
     })
 
 
@@ -99,4 +100,15 @@ class QueueList(DefaultsMixin, generics.ListAPIView):
 class QueueDetail(DefaultsMixin, generics.RetrieveAPIView):
     model = Queue
     serializer_class = QueueSerializer
+
+
+class QueueSongList(DefaultsMixin, generics.ListAPIView):
+    model = Song
+    serializer_class = SongSerializer
+
+    def get_queryset(self):
+        queryset = super(QueueSongList, self).get_queryset()
+        user = self.request.user
+        queue = Queue.objects.get(id=self.kwargs.get('pk'))
+        return queue.songs.all()
 

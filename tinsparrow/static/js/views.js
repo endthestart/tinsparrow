@@ -76,7 +76,7 @@
                 this.renderSong(song);
             }
         },
-        renderSong: function(song) {
+        renderSong: function (song) {
             var container = this,
                 data = {"song": song},
                 template = _.template('<li><a href="#" class="song"><%- song.get("title") %></a></li>');
@@ -112,7 +112,7 @@
                 app.songs.on('add', self.addSong, self);
                 self.album = app.albums.push({id: self.albumId});
                 self.album.fetch({
-                    success: function() {
+                    success: function () {
                         self.render();
                         app.songs.each(self.addSong, self);
                         self.album.fetchSongs();
@@ -129,7 +129,7 @@
                 this.renderSong(song);
             }
         },
-        renderSong: function(song) {
+        renderSong: function (song) {
             var container = this,
                 data = {"song": song},
                 template = _.template('<li><a href="#" class="song"><%- song.get("title") %></a></li>');
@@ -158,7 +158,33 @@
     });
 
     var QueueView = TemplateView.extend({
-        templateName: '#queue-template'
+        templateName: '#queue-template',
+        initialize: function (options) {
+            var self = this;
+            TemplateView.prototype.initialize.apply(this, arguments);
+            this.songs = [];
+            app.collections.ready.done(function() {
+                self.render();
+
+                console.log(app.queue_songs.length);
+                app.queue_songs.each(self.addSong, self);
+                console.log(app.queue_songs.length);
+            })
+        },
+        getContext: function () {
+            return {songs: this.songs}
+        },
+        addSong: function (song) {
+            console.log(song);
+            this.songs[song.get('id')] = song;
+            this.renderSong(song);
+        },
+        renderSong: function (song) {
+            var container = this,
+                data = {"song": song},
+                template = _.template('<li><a href="#" class="song"><%- song.get("title") %></a></li>');
+            $('.songs', container.$el).append(template(data));
+        }
     });
 
     app.views.LibraryView = LibraryView;

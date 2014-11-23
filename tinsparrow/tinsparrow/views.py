@@ -4,10 +4,7 @@ from django import http
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
-from rest_framework import viewsets
-
-from .models import Artist, Album, Queue, Song
-from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
+from .models import Song
 
 
 def songfile(request, song_id):
@@ -31,19 +28,3 @@ class LibraryView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(LibraryView, self).get_context_data(**kwargs)
         return context
-
-
-class ArtistViewSet(viewsets.ModelViewSet):
-    queryset = Artist.objects.all()
-    serializer_class = ArtistSerializer
-
-
-class AlbumViewSet(viewsets.ModelViewSet):
-    queryset = Album.objects.all()
-    serializer_class = AlbumSerializer
-
-
-class SongViewSet(viewsets.ModelViewSet):
-    queryset = Song.objects.all()
-    serializer_class = SongSerializer
-
