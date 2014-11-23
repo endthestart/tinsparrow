@@ -33,10 +33,10 @@ urlpatterns = patterns(
     url(r'^api/artists', include(artist_urls)),
     url(r'^api/albums', include(album_urls)),
     url(r'^api/songs', include(song_urls)),
-    url(r'^$', HomeView.as_view(), name='tinsparrow_home'),
     url(r'^library/', LibraryView.as_view(), name='library'),
-    url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^song/(?P<song_id>\d+)', songfile, name='tinsparrow_song_file'),
+    url(r'^$', HomeView.as_view(), name='tinsparrow_home'),
     url(r'^admin/', include(admin.site.urls)),
 )
 

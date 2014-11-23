@@ -4,46 +4,44 @@ from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
 from .models import Artist, Album, Song
 
 
-class ArtistList(generics.ListCreateAPIView):
-    model = Artist
-    serializer_class = ArtistSerializer
+class DefaultsMixin(object):
+
     permission_classes = [
-        permissions.AllowAny
+        permissions.IsAuthenticated
     ]
 
 
-class ArtistDetail(generics.RetrieveAPIView):
+class ArtistList(DefaultsMixin, generics.ListAPIView):
     model = Artist
     serializer_class = ArtistSerializer
 
 
-class AlbumList(generics.ListCreateAPIView):
+class ArtistDetail(DefaultsMixin, generics.RetrieveAPIView):
+    model = Artist
+    serializer_class = ArtistSerializer
+
+
+class AlbumList(DefaultsMixin, generics.ListAPIView):
     model = Album
     serializer_class = AlbumSerializer
-    permission_classes = [
-        permissions.AllowAny
-    ]
 
 
-class AlbumDetail(generics.RetrieveAPIView):
+class AlbumDetail(DefaultsMixin, generics.RetrieveAPIView):
     model = Artist
     serializer_class = AlbumSerializer
 
 
-class SongList(generics.ListCreateAPIView):
-    model = Song
-    serializer_class = SongSerializer
-    permission_classes = [
-        permissions.AllowAny
-    ]
-
-
-class SongDetail(generics.RetrieveAPIView):
+class SongList(DefaultsMixin, generics.ListAPIView):
     model = Song
     serializer_class = SongSerializer
 
 
-class ArtistAlbumList(generics.ListAPIView):
+class SongDetail(DefaultsMixin, generics.RetrieveAPIView):
+    model = Song
+    serializer_class = SongSerializer
+
+
+class ArtistAlbumList(DefaultsMixin, generics.ListAPIView):
     model = Album
     serializer_class = AlbumSerializer
 
@@ -52,17 +50,16 @@ class ArtistAlbumList(generics.ListAPIView):
         return queryset.filter(artist=self.kwargs.get('pk'))
 
 
-class ArtistSongList(generics.ListAPIView):
+class ArtistSongList(DefaultsMixin, generics.ListAPIView):
     model = Song
     serializer_class = SongSerializer
 
     def get_queryset(self):
         queryset = super(ArtistSongList, self).get_queryset()
-        import pdb; pdb.set_trace()
         return queryset.filter(artist=self.kwargs.get('pk'))
 
 
-class AlbumSongList(generics.ListAPIView):
+class AlbumSongList(DefaultsMixin, generics.ListAPIView):
     model = Song
     serializer_class = SongSerializer
 
