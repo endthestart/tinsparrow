@@ -29,7 +29,7 @@ class SongSerializer(serializers.ModelSerializer):
 
 
 class QueueSerializer(serializers.ModelSerializer):
-    songs = serializers.HyperlinkedIdentityField('songs', view_name='queuesong-list')
+    # songs = serializers.HyperlinkedIdentityField('songs', view_name='queuesong-list')
 
     class Meta:
         model = Queue

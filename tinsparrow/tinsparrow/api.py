@@ -95,20 +95,3 @@ class QueueList(DefaultsMixin, generics.ListAPIView):
         # Ensure the Queue exists ... middleware?
         queue, created = Queue.objects.get_or_create(user=user)
         return queryset.filter(user=user)
-
-
-class QueueDetail(DefaultsMixin, generics.RetrieveAPIView):
-    model = Queue
-    serializer_class = QueueSerializer
-
-
-class QueueSongList(DefaultsMixin, generics.ListAPIView):
-    model = Song
-    serializer_class = SongSerializer
-
-    def get_queryset(self):
-        queryset = super(QueueSongList, self).get_queryset()
-        user = self.request.user
-        queue = Queue.objects.get(id=self.kwargs.get('pk'))
-        return queue.songs.all()
-
