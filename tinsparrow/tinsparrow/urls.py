@@ -1,11 +1,15 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 
 from .views import  LibraryView, songfile, HomeView
+from .api import api_root
 from .api import ArtistList, ArtistDetail
 from .api import AlbumList, AlbumDetail, ArtistAlbumList
 from .api import SongList, SongDetail, ArtistSongList, AlbumSongList
+from .api import QueueDetail, QueueList
+
 
 artist_urls = patterns(
     '',
@@ -28,12 +32,20 @@ song_urls = patterns(
     url(r'^/$', SongList.as_view(), name='song-list'),
 )
 
+queue_urls = patterns(
+    '',
+    url(r'^/(?P<pk>\d+)/$', QueueDetail.as_view(), name='song-detail'),
+    url(r'^/$', QueueList.as_view(), name='queue-list'),
+)
+
 urlpatterns = patterns(
     '',
+    url(r'^api/$', api_root, name='api-root'),
     url(r'^api/artists', include(artist_urls)),
     url(r'^api/albums', include(album_urls)),
     url(r'^api/songs', include(song_urls)),
-    url(r'^library/', LibraryView.as_view(), name='library'),
+    url(r'^api/queue', include(queue_urls)),
+    url(r'^library/', login_required(LibraryView.as_view()), name='library'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^song/(?P<song_id>\d+)', songfile, name='tinsparrow_song_file'),
     url(r'^$', HomeView.as_view(), name='tinsparrow_home'),

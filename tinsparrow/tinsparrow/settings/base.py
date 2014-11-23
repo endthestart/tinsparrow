@@ -203,6 +203,8 @@ LOCAL_APPS = (
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS
 ########## END APP CONFIGURATION
 
+LOGIN_URL = '/'
+
 
 ########## LOGGING CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#logging

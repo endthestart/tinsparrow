@@ -1,7 +1,10 @@
 from rest_framework import generics, permissions
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
-from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
-from .models import Artist, Album, Song
+from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer, QueueSerializer
+from .models import Artist, Album, Song, Queue
 
 
 class DefaultsMixin(object):
@@ -9,6 +12,19 @@ class DefaultsMixin(object):
     permission_classes = [
         permissions.IsAuthenticated
     ]
+
+    paginate_by = 10000
+    paginate_by_param = 'page_size'
+    max_paginate_by = 10000
+
+
+@api_view(('GET', ))
+def api_root(request, format=None):
+    return Response({
+        'artists': reverse('artist-list', request=request, format=format),
+        'albums': reverse('album-list', request=request, format=format),
+        'songs': reverse('song-list', request=request, format=format)
+    })
 
 
 class ArtistList(DefaultsMixin, generics.ListAPIView):
@@ -27,7 +43,7 @@ class AlbumList(DefaultsMixin, generics.ListAPIView):
 
 
 class AlbumDetail(DefaultsMixin, generics.RetrieveAPIView):
-    model = Artist
+    model = Album
     serializer_class = AlbumSerializer
 
 
@@ -66,3 +82,21 @@ class AlbumSongList(DefaultsMixin, generics.ListAPIView):
     def get_queryset(self):
         queryset = super(AlbumSongList, self).get_queryset()
         return queryset.filter(album=self.kwargs.get('pk'))
+
+
+class QueueList(DefaultsMixin, generics.ListAPIView):
+    model = Queue
+    serializer_class = QueueSerializer
+
+    def get_queryset(self):
+        queryset = super(QueueList, self).get_queryset()
+        user = self.request.user
+        # Ensure the Queue exists ... middleware?
+        queue, created = Queue.objects.get_or_create(user=user)
+        return queryset.filter(user=user)
+
+
+class QueueDetail(DefaultsMixin, generics.RetrieveAPIView):
+    model = Queue
+    serializer_class = QueueSerializer
+

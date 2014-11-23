@@ -1,10 +1,6 @@
 var app = (function ($) {
-    var app = {
-        "models": {},
-        "collections": {},
-        "views": {},
-        "router": null
-    };
+    var config = $('#config');
+    var app = JSON.parse(config.text());
 
     $(document).ready(function() {
         var router = new app.router();
@@ -42,31 +38,4 @@ var app = (function ($) {
 //});
 //
 //qv = new QueueView();
-//
-//ArtistModel = Backbone.Model.extend({
-//    urlRoot: '/api/artists',
-//    url: function() {
-//        return this.urlRoot + '/' + this.id + '/';
-//    }
-//});
-//
-//LibraryArtistView = Backbone.View.extend({
-//    initialize: function() {
-//        this.listenTo(this.model, 'change', this.render)
-//    },
-//
-//    render: function(){
-//        console.log(this.model);
-//        this.$el.html(this.model.attributes.name);
-//    }
-//});
-//
-//var model = new ArtistModel({ id: 1 });
-//model.fetch();
-//
-//$(document).ready(function() {
-//    var artist = new LibraryArtistView({
-//        el: $('.artist').first(),
-//        model: model
-//    });
-//});
+

@@ -1,4 +1,4 @@
-from .models import Artist, Album, Song
+from .models import Artist, Album, Song, Queue
 from rest_framework import serializers
 
 
@@ -20,12 +20,19 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class SongSerializer(serializers.ModelSerializer):
-    artist = ArtistSerializer(required=False)
-    album = AlbumSerializer(required=False)
+    #artist = ArtistSerializer(required=False)
+    #album = AlbumSerializer(required=False)
 
     class Meta:
         model = Song
         fields = ('id', 'artist', 'album', 'title', )
+
+
+class QueueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Queue
+        fields = ('id', 'songs', )
 
 
 

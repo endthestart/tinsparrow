@@ -20,8 +20,69 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script type="text/html" id="home-template">
-        <h1>Welcome to Tin Sparrow!</h1>
+    <script type="text/html" id="library-template">
+        <h1>Artists</h1>
+        <% if (artists !== null) { %>
+        <div class="artists">
+            <ul>
+            <% _.each(artists.models, function(artist) { %>
+                <li><a href="#artists/<%- artist.get('id') %>" class="artist"><%- artist.get('name') %></a></li>
+            <% }); %>
+            </ul>
+        </div>
+        <% } else { %>
+            <h3 class="loading">Loading...</h3>
+        <% } %>
+    </script>
+    <script type="text/html" id="album-list-template">
+        <h1>Albums</h1>
+        <% if (albums !== null) { %>
+        <div class="albums">
+            <ul>
+            <% _.each(albums.models, function(album) { %>
+                <li><a href="#albums/<%- album.get('id') %>" class="album"><%- album.get('title') %></a></li>
+            <% }); %>
+            </ul>
+        </div>
+        <% } else { %>
+            <h3 class="loading">Loading...</h3>
+        <% } %>
+    </script>
+    <script type="text/html" id="song-list-template">
+        <h1>Songs</h1>
+        <% if (songs !== null) { %>
+        <div class="songs">
+            <ul>
+            <% _.each(songs.models, function(song) { %>
+                <li><a href="#" class="song"><%- song.get('title') %></a></li>
+            <% }); %>
+            </ul>
+        </div>
+        <% } else { %>
+            <h3 class="loading">Loading...</h3>
+        <% } %>
+    </script>
+    <script type="text/html" id="artist-detail-template">
+        <% if (artist !== null) { %>
+            <h2><%- artist.get('name') %></h2>
+            <p class="artist-description">Some information about the artist.</p>
+            <h3>Albums</h3>
+            <ul class="albums"></ul>
+            <h3>Songs</h3>
+            <ul class="songs"></ul>
+        <% } else { %>
+            <h1 class="loading">Loading...</h1>
+        <% } %>
+    </script>
+    <script type="text/html" id="album-detail-template">
+        <% if (album !== null) { %>
+            <h2><%- album.get('title') %></h2>
+            <p class="artist-description">Some information about the album.</p>
+            <h3>Songs</h3>
+            <ul class="songs"></ul>
+        <% } else { %>
+            <h1 class="loading">Loading...</h1>
+        <% } %>
     </script>
 </head>
 <body>
@@ -69,9 +130,10 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <div>
                 <ul class="nav navbar-nav">
-                    <li>Artists</li>
-                    <li>Albums</li>
-                    <li>Songs</li>
+                    <li><a href="#artists">Artists</a></li>
+                    <li><a href="#albums">Albums</a></li>
+                    <li><a href="#songs">Songs</a></li>
+                    <li><a href="#queue">Queue</a></li>
                 </ul>
             </div>
         </div>
@@ -83,19 +145,19 @@
     </div>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <div class="media-controller">
-            <span>Repeat</span>
-            <span>Previous</span>
-            <span>Play</span>
-            <span>Next</span>
-            <span>Shuffle</span>
-            <span>Volume</span>
-            <span>Queue</span>
-        </div>
-    </div>
-</footer>
+{#<footer class="footer">#}
+{#    <div class="container">#}
+{#        <div class="media-controller">#}
+{#            <span>Repeat</span>#}
+{#            <span>Previous</span>#}
+{#            <span>Play</span>#}
+{#            <span>Next</span>#}
+{#            <span>Shuffle</span>#}
+{#            <span>Volume</span>#}
+{#            <span>Queue</span>#}
+{#        </div>#}
+{#    </div>#}
+{#</footer>#}
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
@@ -104,6 +166,15 @@
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/underscore-min.js' %}"></script>
 <script src="{% static 'js/backbone-min.js' %}"></script>
+<script id="config" type="text/json">
+    {
+        "models": {},
+        "collections": {},
+        "views": {},
+        "router": null,
+        "apiRoot": "{% url 'api-root' %}"
+    }
+</script>
 
 <!-- place project specific Javascript in this file -->
 <script src="{% static 'js/tinsparrow.js' %}"></script>
