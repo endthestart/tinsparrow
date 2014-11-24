@@ -85,41 +85,6 @@ body {
   margin-top: 0;
 }
 
-
-/*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-  margin-bottom: 30px;
-  text-align: center;
-}
-.placeholders h4 {
-  margin-bottom: 0;
-}
-.placeholder {
-  margin-bottom: 20px;
-}
-.placeholder img {
-  display: inline-block;
-  border-radius: 50%;
-}
-
-
-
-
-
-/* QUEUE
-*************/
-
-.queue {
-    cursor: pointer;
-}
-
-.active {
-    font-weight: 700;
-}
-
 /* MEDIA CONTROLLER
 *************/
 .footer {
@@ -133,4 +98,22 @@ body {
 
 .media-controller {
     text-align: center;
+}
+
+/* Artist Listing */
+
+ul.artist-list li {
+  width: 250px;
+  display: inline-block;
+}
+
+ul.artist-list li a {
+  text-decoration: none;
+}
+
+.artist-image {
+  padding: 5px;
+  text-align: center;
+  min-height: 220px;
+  width: 100%;
 }

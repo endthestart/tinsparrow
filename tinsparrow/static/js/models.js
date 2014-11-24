@@ -88,17 +88,6 @@
             url: data.queue
         });
         app.queue = new app.collections.Queues();
-
-        //app.queues.fetch({
-        //    success: function() {
-        //        app.queue = app.queues.first();
-        //        app.queue.fetchSongs();
-        //    }
-        //});
-
-        var MyQueue = Backbone.Model.extend({urlRoot: '/queue'});
-        var myqueue = new MyQueue({id: 1});
-        console.log(myqueue);
     });
 
 })(jQuery, Backbone, _, app);

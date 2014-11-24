@@ -20,8 +20,6 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 
 class SongSerializer(serializers.ModelSerializer):
-    #artist = ArtistSerializer(required=False)
-    #album = AlbumSerializer(required=False)
 
     class Meta:
         model = Song

@@ -157,12 +157,11 @@
         templateName: '#artist-song-list-template'
     });
 
-    var QueueView = SongListView.extend({
+    var QueueView = TemplateView.extend({
         templateName: '#queue-template',
         initialize: function (options) {
             var self = this;
             TemplateView.prototype.initialize.apply(this, arguments);
-            this.songs = [];
             app.collections.ready.done(function() {
                 app.queue.fetch({
                     success: $.proxy(self.render, self)
@@ -171,12 +170,6 @@
         },
         getContext: function () {
             return {songs: app.queue.models}
-        },
-        renderSong: function (song) {
-            var container = this,
-                data = {"song": song},
-                template = _.template('<li><a href="#" class="song"><%- song.get("title") %></a></li>');
-            $('.songs', container.$el).append(template(data));
         }
     });
 
