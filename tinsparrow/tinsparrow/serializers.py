@@ -26,17 +26,3 @@ class SongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Song
         fields = ('id', 'artist', 'album', 'title', )
-
-
-class QueueSerializer(serializers.ModelSerializer):
-    # songs = serializers.HyperlinkedIdentityField('songs', view_name='queuesong-list')
-
-    class Meta:
-        model = Queue
-        fields = ('id', 'songs', )
-
-
-
-
-
-

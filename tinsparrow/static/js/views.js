@@ -157,27 +157,20 @@
         templateName: '#artist-song-list-template'
     });
 
-    var QueueView = TemplateView.extend({
+    var QueueView = SongListView.extend({
         templateName: '#queue-template',
         initialize: function (options) {
             var self = this;
             TemplateView.prototype.initialize.apply(this, arguments);
             this.songs = [];
             app.collections.ready.done(function() {
-                self.render();
-
-                console.log(app.queue_songs.length);
-                app.queue_songs.each(self.addSong, self);
-                console.log(app.queue_songs.length);
+                app.queue.fetch({
+                    success: $.proxy(self.render, self)
+                });
             })
         },
         getContext: function () {
-            return {songs: this.songs}
-        },
-        addSong: function (song) {
-            console.log(song);
-            this.songs[song.get('id')] = song;
-            this.renderSong(song);
+            return {songs: app.queue.models}
         },
         renderSong: function (song) {
             var container = this,

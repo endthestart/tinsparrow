@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer, QueueSerializer
+from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
 from .models import Artist, Album, Song, Queue
 
 
@@ -87,11 +87,10 @@ class AlbumSongList(DefaultsMixin, generics.ListAPIView):
 
 class QueueList(DefaultsMixin, generics.ListAPIView):
     model = Queue
-    serializer_class = QueueSerializer
+    serializer_class = SongSerializer
 
     def get_queryset(self):
-        queryset = super(QueueList, self).get_queryset()
         user = self.request.user
         # Ensure the Queue exists ... middleware?
         queue, created = Queue.objects.get_or_create(user=user)
-        return queryset.filter(user=user)
+        return Song.objects.filter(queue=queue)

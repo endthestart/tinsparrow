@@ -86,7 +86,11 @@
     </script>
     <script type="text/html" id="queue-template">
         <h1>Queue</h1>
-        <ul class="songs"></ul>
+        <ul class="songs">
+            <% _.each(songs, function(song) { %>
+                <li><a href="#" class="song"><%- song.get('title') %></a></li>
+            <% }); %>
+        </ul>
     </script>
 </head>
 <body>

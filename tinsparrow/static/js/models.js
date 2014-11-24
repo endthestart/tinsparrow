@@ -84,16 +84,10 @@
         app.songs = new app.collections.Songs();
 
         app.collections.Queues = BaseCollection.extend({
-            model: app.models.Queue,
+            model: app.models.Song,
             url: data.queue
         });
-        app.queues = new app.collections.Queues();
-
-        app.collections.QueueSongs = BaseCollection.extend({
-            model: app.models.Song,
-            url: data.songs
-        });
-        app.queue_songs = new app.collections.QueueSongs();
+        app.queue = new app.collections.Queues();
 
         //app.queues.fetch({
         //    success: function() {
