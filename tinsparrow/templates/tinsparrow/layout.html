@@ -2,233 +2,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../favicon.ico">
 
-    <title>Tin Sparrow</title>
+  <title>Tin Sparrow</title>
 
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/tinsparrow.css' %}" rel="stylesheet">
-    {% block extra_css %}{% endblock extra_css %}
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/tinsparrow.css' %}" rel="stylesheet">
+  {% block extra_css %}{% endblock extra_css %}
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Tin Sparrow</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
-            </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
-        </div>
+<nav class="navbar navbar-shaded navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+              aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Tin Sparrow</a>
+
+      <form class="navbar-form navbar-right">
+        <input type="text" class="form-control search-box" placeholder="Search...">
+      </form>
     </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Help</a></li>
+      </ul>
+    </div>
+  </div>
 </nav>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Library <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Shuffle</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Playlists</a></li>
-                <li><a href="">Playlist One</a></li>
-                <li><a href="">Playlist Two</a></li>
-                <li><a href="">Playlist Three</a></li>
-                <li><a href="">Playlist Four</a></li>
-            </ul>
-        </div>
-
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <div>
-                <ul class="nav navbar-nav">
-                    <li><a href="#artists">Artists</a></li>
-                    <li><a href="#albums">Albums</a></li>
-                    <li><a href="#songs">Songs</a></li>
-                    <li><a href="#queue">Queue</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main content">
-            <h1>Artists</h1>
-            <ul class="artist-list">
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-                <li class="artist">
-                    <a href="#">
-                        <div class="artist-image">
-                            <img src="http://placehold.it/240x150" />
-                        </div>
-                        <div class="artist-label">99 Problems - The Prodigy Remix</div>
-                    </a>
-                </li>
-            </ul>
-        </div>
+  <div class="row">
+    <div class="col-sm-3 col-md-2 sidebar">
+      <ul class="nav nav-sidebar">
+        <li class="active"><a href="#">Library <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Shuffle</a></li>
+      </ul>
+      <ul class="nav nav-sidebar">
+        <li><a href="">Playlists</a></li>
+        <li><a href="">Playlist One</a></li>
+        <li><a href="">Playlist Two</a></li>
+        <li><a href="">Playlist Three</a></li>
+        <li><a href="">Playlist Four</a></li>
+      </ul>
     </div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main content-nav">
+      <div>
+        <ul class="nav navbar-nav">
+          <li><a href="#artists">Artists</a></li>
+          <li><a href="#albums">Albums</a></li>
+          <li><a href="#songs">Songs</a></li>
+          <li><a href="#queue">Queue</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main content">
+      <ul class="artist-list block-list">
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+        <li class="artist block-list-item">
+          <a href="#">
+            <div class="artist-image block-list-image">
+              <img src="http://placehold.it/240x150"/>
+            </div>
+            <div class="artist-label block-list-label">99 Problems - The Prodigy Remix</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <footer class="footer">
-    <div class="container">
-        <div class="media-controller">
-            <span>Repeat</span>
-            <span>Previous</span>
-            <span>Play</span>
-            <span>Next</span>
-            <span>Shuffle</span>
-            <span>Volume</span>
-            <span>Queue</span>
-        </div>
+  <div class="container">
+    <div class="media-controller">
+      <span>Repeat</span>
+      <span>Previous</span>
+      <span>Play</span>
+      <span>Next</span>
+      <span>Shuffle</span>
+      <span>Volume</span>
+      <span>Queue</span>
     </div>
+  </div>
 </footer>
 
 <!-- Bootstrap core JavaScript

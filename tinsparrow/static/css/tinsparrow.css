@@ -26,6 +26,22 @@ body {
   border: 0;
 }
 
+.navbar-form .search-box {
+  width: 400px;
+}
+
+.navbar-shaded {
+  background: #cccccc;
+}
+
+.navbar-nav > li > a {
+  color: #000;
+}
+
+.navbar-brand {
+  color: #000;
+}
+
 /*
  * Sidebar
  */
@@ -40,9 +56,9 @@ body {
     top: 51px;
     bottom: 60px;
     left: 0;
+    width: 210px;
     z-index: 1000;
     display: block;
-    padding: 20px;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
     background-color: #f5f5f5;
@@ -72,13 +88,20 @@ body {
  * Main content
  */
 
+.content-nav {
+  border-bottom: 1px solid #000;
+  margin-bottom: 15px;
+}
+
 .main {
-  padding: 20px;
+  padding: 0;
 }
 @media (min-width: 768px) {
   .main {
-    padding-right: 40px;
-    padding-left: 40px;
+    padding-right: 10px;
+    padding-left: 10px;
+    margin-left: 210px;
+    margin-bottom: 60px;
   }
 }
 .main .page-header {
@@ -88,7 +111,7 @@ body {
 /* MEDIA CONTROLLER
 *************/
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
@@ -102,24 +125,32 @@ body {
 
 /* Artist Listing */
 
-ul.artist-list li {
-  width: 250px;
+ul.block-list {
+  padding-left: 15px;
+}
+
+ul.block-list li {
+  width: 252px;
   display: inline-block;
   border: 1px solid #000;
   margin: 0 15px 15px 0;
   padding: 5px;
 }
 
-ul.artist-list li a {
+ul.block-list li a {
   text-decoration: none;
 }
 
-ul.artist-list > .artist-image {
-  text-align: center;
-  width: 100%;
+ul.block-list .block-list-image {
+  width: 240px;
 }
 
-ul.artist-list > .artist-label {
+ul.block-list .block-list-label {
   height: 25px;
+  padding-top: 5px;
   overflow: hidden;
+}
+
+.artist-label {
+  color: #000;
 }
