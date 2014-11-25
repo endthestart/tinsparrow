@@ -105,15 +105,21 @@ body {
 ul.artist-list li {
   width: 250px;
   display: inline-block;
+  border: 1px solid #000;
+  margin: 0 15px 15px 0;
+  padding: 5px;
 }
 
 ul.artist-list li a {
   text-decoration: none;
 }
 
-.artist-image {
-  padding: 5px;
+ul.artist-list > .artist-image {
   text-align: center;
-  min-height: 220px;
   width: 100%;
+}
+
+ul.artist-list > .artist-label {
+  height: 25px;
+  overflow: hidden;
 }
