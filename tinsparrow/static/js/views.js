@@ -67,8 +67,8 @@
         renderAlbum: function (album) {
             var container = this,
                 data = {"album": album},
-                template = _.template('<li><a href="#album/<%- album.get("id") %>" class="album"><%- album.get("title") %></a></li>');
-            $('.albums', container.$el).append(template(data));
+                template = _.template('<a href="#albums/<%- album.get("id") %>"><li class="album block-list-item"><div class="album-image block-list-image"><img src="http://placehold.it/140x140"/></div><div class="album-label block-list-label"><%- album.get("title") %></div></li></a>');
+            $('.album-list', container.$el).append(template(data));
         },
         addSong: function (song) {
             if (song.inArtist(this.artist)) {

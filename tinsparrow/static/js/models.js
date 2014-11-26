@@ -47,10 +47,10 @@
     });
     app.models.Song = BaseModel.extend({
         inArtist: function (artist) {
-            return artist.get('id') == this.get('artist');
+            return artist.get('id') == this.get('artist_id');
         },
         inAlbum: function (album) {
-            return album.get('id') == this.get('album');
+            return album.get('id') == this.get('album_id');
         }
     });
 

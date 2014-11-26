@@ -21,43 +21,58 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script type="text/html" id="library-template">
-        <h1>Artists</h1>
         <% if (artists !== null) { %>
-        <div class="artists">
-            <ul>
+            <ul class="artist-list block-list">
                 <% _.each(artists.models, function(artist) { %>
-                <li><a href="#artists/<%- artist.get('id') %>" class="artist"><%- artist.get('name') %></a></li>
+                <a href="#artists/<%- artist.get('id') %>">
+                    <li class="artist block-list-item">
+                        <div class="artist-image block-list-image">
+                            <img src="http://placehold.it/240x150"/>
+                        </div>
+                        <div class="artist-label block-list-label"><%- artist.get('name') %></div>
+                    </li>
+                </a>
                 <% }); %>
             </ul>
-        </div>
         <% } else { %>
         <h3 class="loading">Loading...</h3>
         <% } %>
     </script>
     <script type="text/html" id="album-list-template">
-        <h1>Albums</h1>
         <% if (albums !== null) { %>
-        <div class="albums">
-            <ul>
+            <ul class="album-list block-list">
                 <% _.each(albums.models, function(album) { %>
-                <li><a href="#albums/<%- album.get('id') %>" class="album"><%- album.get('title') %></a></li>
+                <a href="#albums/<%- album.get('id') %>">
+                    <li class="album block-list-item">
+                        <div class="album-image block-list-image">
+                            <img src="http://placehold.it/140x140"/>
+                        </div>
+                        <div class="album-label block-list-label"><%- album.get('title') %></div>
+                    </li>
+                </a>
                 <% }); %>
             </ul>
-        </div>
         <% } else { %>
         <h3 class="loading">Loading...</h3>
         <% } %>
     </script>
     <script type="text/html" id="song-list-template">
-        <h1>Songs</h1>
         <% if (songs !== null) { %>
-        <div class="songs">
-            <ul>
-                <% _.each(songs.models, function(song) { %>
-                <li><a href="#" class="song"><%- song.get('title') %></a></li>
-                <% }); %>
-            </ul>
-        </div>
+        <table class="song-list table table-striped table-hover">
+            <thead>
+                <tr><th width="30%">Title</th><th width="10%">Length</th><th width="20%">Artist</th><th width="20%">Album</th></tr>
+            </thead>
+            <% _.each(songs.models, function(song) { %>
+            <tbody>
+            <tr>
+                <td><a href="#"><%- song.get('title') %></a></td>
+                <td>2:33</a></td>
+                <td><a href="#artists/<%- song.get('artist_id') %>"><%- song.get('artist') %></a></td>
+                <td><a href="#albums/<%- song.get('album_id') %>"><%- song.get('album') %></a></td>
+            </tr>
+            </tbody>
+            <% }); %>
+        </table>
         <% } else { %>
         <h3 class="loading">Loading...</h3>
         <% } %>
@@ -65,9 +80,16 @@
     <script type="text/html" id="artist-detail-template">
         <% if (artist !== null) { %>
         <h2><%- artist.get('name') %></h2>
-        <p class="artist-description">Some information about the artist.</p>
+        <div class="row">
+            <div class="artist-detail-image">
+                <img src="http://placehold.it/400x200"/>
+            </div>
+            <div class="artist-detail-bio">
+                <p>Initially pegged as something as a voice of a generation when Loser turned into a smash crossover success, Beck did wind up crystallizing much of the post-modern ruckus of the 90s alternative explosion, but in unexpected ways. Based in the underground anti-folk and noise-rock worlds, Beck encompassed all manners of modern music, drawing in hip-hop, blues, ... MORE</p>
+            </div>
+        </div>
         <h3>Albums</h3>
-        <ul class="albums"></ul>
+        <ul class="album-list block-list"></ul>
         <h3>Songs</h3>
         <ul class="songs"></ul>
         <% } else { %>
@@ -85,16 +107,29 @@
         <% } %>
     </script>
     <script type="text/html" id="queue-template">
-        <h1>Queue</h1>
-        <ul class="songs">
+        <% if (songs !== null) { %>
+        <table class="song-list table table-striped table-hover">
+            <thead>
+                <tr><th width="30%">Title</th><th width="10%">Length</th><th width="20%">Artist</th><th width="20%">Album</th></tr>
+            </thead>
             <% _.each(songs, function(song) { %>
-            <li><a href="#" class="song"><%- song.get('title') %></a></li>
+            <tbody>
+            <tr>
+                <td><a href="#" class="song"><%- song.get('title') %></a></td>
+                <td><a href="#" class="song">2:33</a></td>
+                <td><a href="#" class="song"><%- song.get('artist') %></a></td>
+                <td><a href="#" class="song"><%- song.get('album') %></a></td>
+            </tr>
+            </tbody>
             <% }); %>
-        </ul>
+        </table>
+        <% } else { %>
+        <h3 class="loading">Loading...</h3>
+        <% } %>
     </script>
 </head>
 <body>
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-shaded navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -105,16 +140,15 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">Tin Sparrow</a>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control search-box" placeholder="Search...">
+            </form>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
                 <li><a href="#">Help</a></li>
             </ul>
-            <form class="navbar-form navbar-right">
-                <input type="text" class="form-control" placeholder="Search...">
-            </form>
         </div>
     </div>
 </nav>
@@ -135,7 +169,7 @@
             </ul>
         </div>
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main content-nav">
             <div>
                 <ul class="nav navbar-nav">
                     <li><a href="#artists">Artists</a></li>

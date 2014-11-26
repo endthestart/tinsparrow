@@ -101,7 +101,7 @@ body {
     padding-right: 10px;
     padding-left: 10px;
     margin-left: 210px;
-    margin-bottom: 60px;
+    margin-bottom: 0;
   }
 }
 .main .page-header {
@@ -130,11 +130,18 @@ ul.block-list {
 }
 
 ul.block-list li {
-  width: 252px;
   display: inline-block;
   border: 1px solid #000;
   margin: 0 15px 15px 0;
   padding: 5px;
+}
+
+ul.block-list li.artist {
+  width: 252px;
+}
+
+ul.block-list li.album {
+  width: 152px;
 }
 
 ul.block-list li a {
@@ -142,7 +149,6 @@ ul.block-list li a {
 }
 
 ul.block-list .block-list-image {
-  width: 240px;
 }
 
 ul.block-list .block-list-label {
@@ -153,4 +159,26 @@ ul.block-list .block-list-label {
 
 .artist-label {
   color: #000;
+}
+
+.album-label {
+  color: #000;
+}
+
+/* Artist Details */
+
+.artist-detail-image {
+  float: left;
+}
+
+.artist-detail-bio {
+  font-size: 1.5em;
+}
+
+/* Song Listing */
+
+table.song-list {
+  table-layout:fixed;
+  overflow:hidden;
+  white-space: nowrap;
 }
