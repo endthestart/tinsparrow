@@ -147,7 +147,7 @@ class Importer(object):
                             'artist': artist,
                             'title': media_dict['title'],
                             'track': media_dict['track'],
-                            'content_type': media_file.type,
+                            'content_type': CONTENT_TYPES.get(media_file.type, 'mp3'),
                             'length': media_file.length,
                         }
                     )

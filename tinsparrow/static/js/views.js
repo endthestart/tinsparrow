@@ -169,7 +169,7 @@
             })
         },
         getContext: function () {
-            return {songs: app.queue.models}
+            return {songs: app.queue}
         }
     });
 

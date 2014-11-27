@@ -62,16 +62,16 @@
             <thead>
                 <tr><th width="30%">Title</th><th width="10%">Length</th><th width="20%">Artist</th><th width="20%">Album</th></tr>
             </thead>
-            <% _.each(songs.models, function(song) { %>
             <tbody>
+            <% _.each(songs.models, function(song) { %>
             <tr>
-                <td><a href="#"><%- song.get('title') %></a></td>
+                <td><a href="#" class="play-song"><%- song.get('title') %></a></td>
                 <td>2:33</a></td>
                 <td><a href="#artists/<%- song.get('artist_id') %>"><%- song.get('artist') %></a></td>
                 <td><a href="#albums/<%- song.get('album_id') %>"><%- song.get('album') %></a></td>
             </tr>
-            </tbody>
             <% }); %>
+            </tbody>
         </table>
         <% } else { %>
         <h3 class="loading">Loading...</h3>
@@ -112,7 +112,7 @@
             <thead>
                 <tr><th width="30%">Title</th><th width="10%">Length</th><th width="20%">Artist</th><th width="20%">Album</th></tr>
             </thead>
-            <% _.each(songs, function(song) { %>
+            <% _.each(songs.models, function(song) { %>
             <tbody>
             <tr>
                 <td><a href="#" class="song"><%- song.get('title') %></a></td>
@@ -216,7 +216,6 @@
         "router": null,
         "apiRoot": "{% url 'api-root' %}"
     }
-
 </script>
 
 <!-- place project specific Javascript in this file -->

@@ -53,7 +53,6 @@
             return album.get('id') == this.get('album_id');
         }
     });
-
     app.models.Queue = BaseModel.extend({
         fetchSongs: function () {
             var songs = this.get('songs');
