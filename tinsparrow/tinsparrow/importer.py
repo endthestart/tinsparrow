@@ -7,9 +7,16 @@ from .models import Artist, Album, Song
 from beets.mediafile import MediaFile, FileTypeError, UnreadableFileError
 
 
-LOSSY_MEDIA_FORMATS = ["mp3", "aac", "ogg", "ape", "m4a", "asf", "wma"]
+#LOSSY_MEDIA_FORMATS = ["mp3", "aac", "ogg", "ape", "m4a", "asf", "wma"]
+LOSSY_MEDIA_FORMATS = ["mp3", "ogg", "m4a"]
 LOSSLESS_MEDIA_FORMATS = ["flac"]
 MEDIA_FORMATS = LOSSY_MEDIA_FORMATS + LOSSLESS_MEDIA_FORMATS
+
+CONTENT_TYPES = {
+    'ogg': 'audio/ogg',
+    'mp3': 'audio/mpeg',
+    'm4a': 'audio/m4a',
+}
 
 SINGLE_ARTIST_THRESH = 0.25
 VARIOUS_ARTISTS = u'Various Artists'
@@ -82,6 +89,10 @@ class Importer(object):
                         'track': None,
                     }
 
+                    # m.format = MP3
+                    # m.type = mp3
+
+
                     missing_metadata = False
 
                     # TODO: Make this all into a nice dictionary
@@ -135,7 +146,9 @@ class Importer(object):
                             'album': album,
                             'artist': artist,
                             'title': media_dict['title'],
-                            'track': media_dict['track']
+                            'track': media_dict['track'],
+                            'content_type': media_file.type,
+                            'length': media_file.length,
                         }
                     )
 

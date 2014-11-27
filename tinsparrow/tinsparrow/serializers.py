@@ -24,7 +24,12 @@ class SongSerializer(serializers.ModelSerializer):
     artist = serializers.RelatedField('artist')
     album_id = serializers.PrimaryKeyRelatedField('album')
     album = serializers.RelatedField('album')
+    url = serializers.SerializerMethodField('get_song_url')
+
+    def get_song_url(self, obj):
+        from rest_framework.reverse import reverse
+        return reverse('song_file', args=[obj.id], request=self.context.get('request', None))
 
     class Meta:
         model = Song
-        fields = ('id', 'artist_id', 'artist', 'album_id', 'album', 'title', )
+        fields = ('id', 'artist_id', 'artist', 'album_id', 'album', 'title', 'url', )

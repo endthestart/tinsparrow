@@ -1,6 +1,7 @@
 import logging
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -100,6 +101,25 @@ class Song(models.Model):
         default=0,
         help_text=_("The size of the file in bytes.")
     )
+    content_type = models.CharField(
+        _('content type'),
+        max_length=255,
+        default='',
+        blank=True,
+        help_text=_("The content type of the media file, such as 'audio/m4a'."),
+    )
+    length = models.FloatField(
+        _('length'),
+        default=0,
+        help_text=_("The length of the song in seconds (stores as a float)."),
+    )
+
+    def get_absolute_url(self):
+        return reverse('song_file', kwargs={'song_id': self.id, })
+
+    def url(self):
+        from rest_framework.reverse import reverse as drf_reverse
+        return drf_reverse('song_file', kwargs={'song_id': self.id, })
 
     def __unicode__(self):
         return self.title

@@ -10,7 +10,7 @@ from .models import Song
 def songfile(request, song_id):
     song = get_object_or_404(Song, id=song_id)
     song_data = open(os.path.join(song.path, song.filename)).read()
-    return http.HttpResponse(song_data, content_type='audio/m4a')
+    return http.HttpResponse(song_data, content_type=song.content_type)
 
 
 class HomeView(TemplateView):

@@ -46,7 +46,7 @@ urlpatterns = patterns(
     url(r'^api/queue', include(queue_urls)),
     url(r'^library/', login_required(LibraryView.as_view()), name='library'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^song/(?P<song_id>\d+)', songfile, name='tinsparrow_song_file'),
+    url(r'^song/(?P<song_id>\d+)', songfile, name='song_file'),
     url(r'^$', HomeView.as_view(), name='tinsparrow_home'),
     url(r'^layout/$', LayoutView.as_view(), name='layout_view'),
     url(r'^admin/', include(admin.site.urls)),

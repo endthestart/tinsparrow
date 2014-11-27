@@ -52,6 +52,11 @@ class SongList(DefaultsMixin, generics.ListAPIView):
     model = Song
     serializer_class = SongSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = Song.objects.all()
+        serializer = SongSerializer(queryset, many=True, context={'request': self.request})
+        return Response(serializer.data)
+
 
 class SongDetail(DefaultsMixin, generics.RetrieveAPIView):
     model = Song
