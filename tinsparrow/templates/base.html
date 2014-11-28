@@ -65,8 +65,8 @@
             <tbody>
             <% _.each(songs.models, function(song) { %>
             <tr>
-                <td><a href="#" class="play-song"><%- song.get('title') %></a></td>
-                <td>2:33</a></td>
+                <td><a href="#songs" class="play-song" data-id="<%- song.get('id') %>" data-url="<%- song.get('song_url') %>" data-content-type="<%- song.get('content_type') %>"><%- song.get('title') %></a></td>
+                <td><%- song.get('length') %></td>
                 <td><a href="#artists/<%- song.get('artist_id') %>"><%- song.get('artist') %></a></td>
                 <td><a href="#albums/<%- song.get('album_id') %>"><%- song.get('album') %></a></td>
             </tr>
@@ -116,7 +116,7 @@
             <tbody>
             <tr>
                 <td><a href="#" class="song"><%- song.get('title') %></a></td>
-                <td><a href="#" class="song">2:33</a></td>
+                <td><a href="#" class="song"><%- song.get('length') %></a></td>
                 <td><a href="#" class="song"><%- song.get('artist') %></a></td>
                 <td><a href="#" class="song"><%- song.get('album') %></a></td>
             </tr>
@@ -190,6 +190,7 @@
 <footer class="footer">
     <div class="container">
         <div class="media-controller">
+            <audio controls preload="none" id="audio-player"></audio>
             <span>Repeat</span>
             <span>Previous</span>
             <span>Play</span>

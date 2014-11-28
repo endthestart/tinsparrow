@@ -1,4 +1,7 @@
+import json
+
 from rest_framework import generics, permissions
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -90,12 +93,46 @@ class AlbumSongList(DefaultsMixin, generics.ListAPIView):
         return queryset.filter(album=self.kwargs.get('pk'))
 
 
-class QueueList(DefaultsMixin, generics.ListAPIView):
-    model = Queue
+class QueueList(DefaultsMixin, generics.ListCreateAPIView):
+    model = Song
     serializer_class = SongSerializer
 
     def get_queryset(self):
         user = self.request.user
         # Ensure the Queue exists ... middleware?
         queue, created = Queue.objects.get_or_create(user=user)
-        return Song.objects.filter(queue=queue)
+        return queue.songs.all()
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        queue, created = Queue.objects.get_or_create(user=user)
+        song_json = json.loads(self.request.POST.get('song_list', None))
+        if song_json:
+            queue.songs.clear()
+            for song_data in song_json:
+                try:
+                    song = Song.objects.get(id=song_data.get('id'))
+                    queue.songs.add(song)
+                except Song.DoesNotExist:
+                    song = None
+        return Response(song_json, status=status.HTTP_201_CREATED, headers={})
+    #
+    # def create(self, request, *args, **kwargs):
+    #     import pdb; pdb.set_trace()
+    #     serializer = self.get_serializer(data=request.DATA, files=request.FILES)
+    #
+    #     if serializer.is_valid():
+    #         self.pre_save(serializer.object)
+    #         self.object = serializer.save(force_insert=True)
+    #         self.post_save(self.object, created=True)
+    #         headers = self.get_success_headers(serializer.data)
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED,
+    #                         headers=headers)
+    #
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #
+    # def get_success_headers(self, data):
+    #     try:
+    #         return {'Location': data[api_settings.URL_FIELD_NAME]}
+    #     except (TypeError, KeyError):
+    #         return {}

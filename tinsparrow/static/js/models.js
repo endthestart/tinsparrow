@@ -57,7 +57,7 @@
         fetchSongs: function () {
             var songs = this.get('songs');
             if (songs) {
-                app.queue_songs.fetch({url: songs, remove: false});
+                app.queue.fetch({url: songs, remove: false});
             }
         }
     });
@@ -84,7 +84,45 @@
 
         app.collections.Queues = BaseCollection.extend({
             model: app.models.Song,
-            url: data.queue
+            url: data.queue,
+            currentSong: null,
+            save: function(attributes, options) {
+                var queueData = {'song_list': JSON.stringify(this.toJSON())};
+                var self = this;
+                console.log(queueData);
+                $.ajax({
+                    type:"POST",
+                    url: data.queue,
+                    data: queueData,
+                    success: function() {console.log('success...');},
+                    dataType: "json",
+                    crossDomain: false,
+                    beforeSend: function(xhr, settings) {
+                      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    },
+                    success: function () {
+                        self.fetch({
+                            success: function () {
+                                self.playQueue();
+                            }
+                        });
+                    }
+                });
+
+            },
+            playQueue: function() {
+                this.fetch();
+                console.log(this);
+                this.$player = $('#audio-player');
+                this.audioPlayer = this.$player.get(0);
+                var song = this.at(0);
+                console.log(this.at(0).get('song_url'));
+                this.$player.empty().append(
+                    '<source src="' + song.get('song_url') + '" type="' + song.get('content_type') + '">'
+                );
+                this.audioPlayer.load();
+                this.audioPlayer.play();
+            }
         });
         app.queue = new app.collections.Queues();
     });
