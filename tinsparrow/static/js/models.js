@@ -83,7 +83,11 @@
                 var self = this;
                 this.$player = $('#audio-player');
                 this.audioPlayer = this.$player.get(0);
-                //this.audioPlayer.addEventListener('ended', this.playNextSong(event));
+                this.audioPlayer.addEventListener('ended', function (event) {
+                    if (self.currentSong !== null) {
+                        self.playNextSong(event);
+                    }
+                });
             },
             save: function(attributes, options) {
                 var queueData = {'song_list': JSON.stringify(this.toJSON())};
@@ -110,19 +114,30 @@
 
             },
             playQueue: function() {
-                var song = this.at(0);
-                this.currentSong = song.get('id');
-                this.$player.empty().append(
-                    '<source src="' + song.get('song_url') + '" type="' + song.get('content_type') + '">'
-                );
-                this.audioPlayer.load();
-                this.audioPlayer.play();
+                if (this.currentSong === null) {
+                    var song = this.at(0);
+                    this.currentSong = song.get('id');
+                    this.$player.empty().append(
+                        '<source src="' + song.get('song_url') + '" type="' + song.get('content_type') + '">'
+                    );
+                    this.audioPlayer.load();
+                    this.audioPlayer.play();
+                    console.log("Starting the queue.");
+                } else {
+                    if (this.audioPlayer.paused) {
+                        this.audioPlayer.play();
+                        console.log("Playing current song.");
+                    } else {
+                        this.audioPlayer.pause();
+                        console.log("Pausing current song.");
+                    }
+                }
             },
             playNextSong: function(event) {
+                console.log(event);
                 if (this.currentSong === null) {
                     this.playQueue();
-                }
-                else {
+                } else {
                     var currentSong = app.queue.get({'id': app.queue.currentSong});
                     var nextSongIndex = app.queue.indexOf(currentSong)+1;
                     var song = app.queue.at(nextSongIndex);
@@ -134,7 +149,23 @@
                     this.audioPlayer.load();
                     this.audioPlayer.play();
                 }
-
+            },
+            playPreviousSong: function(event) {
+                console.log(event);
+                if (this.currentSong === null) {
+                    this.playQueue();
+                } else {
+                    var currentSong = app.queue.get({'id': app.queue.currentSong});
+                    var nextSongIndex = app.queue.indexOf(currentSong)-1;
+                    var song = app.queue.at(nextSongIndex);
+                    this.currentSong = song.get('id');
+                    console.log(song);
+                    this.$player.empty().append(
+                        '<source src="' + song.get('song_url') + '" type="' + song.get('content_type') + '">'
+                    );
+                    this.audioPlayer.load();
+                    this.audioPlayer.play();
+                }
             }
         });
         app.queue = new app.collections.Queues();

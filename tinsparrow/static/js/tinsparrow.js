@@ -48,6 +48,18 @@ function getCookie(name) {
 }
 var csrftoken = getCookie('csrftoken');
 
+$('.play-queue').bind('click', function () {
+    app.queue.playQueue();
+});
+
+$('.previous-queue').bind('click', function () {
+    app.queue.playPreviousSong();
+});
+
+$('.next-queue').bind('click', function () {
+    app.queue.playNextSong(null);
+});
+
 //var SONG_SELECTOR = '.js-song',
 //    PLAYER_SELECTOR = '#audio-player';
 //
