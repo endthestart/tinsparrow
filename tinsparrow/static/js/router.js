@@ -14,39 +14,39 @@
             this.current = null;
             Backbone.history.start();
         },
-        library: function() {
+        library: function () {
             var view = new app.views.LibraryView({
                 el: this.contentElement
             });
             this.render(view);
         },
-        albums: function() {
+        albums: function () {
             var view = new app.views.AlbumListView({
                 el: this.contentElement
             });
             this.render(view);
         },
-        songs: function() {
+        songs: function () {
             var view = new app.views.SongListView({
                 el: this.contentElement
             });
             this.render(view);
         },
-        artist: function(id) {
+        artist: function (id) {
             var view = new app.views.ArtistDetailView({
                 el: this.contentElement,
                 artistId: id
             });
             this.render(view);
         },
-        album: function(id) {
+        album: function (id) {
             var view = new app.views.AlbumDetailView({
                 el: this.contentElement,
                 albumId: id
             });
             this.render(view);
         },
-        queue: function() {
+        queue: function () {
             var view = new app.views.QueueView({
                 el: this.contentElement
             });

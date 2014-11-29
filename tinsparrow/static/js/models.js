@@ -89,31 +89,32 @@
                     }
                 });
             },
-            save: function(attributes, options) {
+            save: function (attributes, options) {
                 var queueData = {'song_list': JSON.stringify(this.toJSON())};
                 var self = this;
                 $.ajax({
-                    type:"POST",
+                    type: "POST",
                     url: data.queue,
                     data: queueData,
                     dataType: "json",
                     crossDomain: false,
-                    beforeSend: function(xhr, settings) {
-                      xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     },
                     success: function () {
                         self.fetch({
                             success: function () {
                                 if (self.currentSong === null) {
                                     self.playQueue();
-                                };
+                                }
+                                ;
                             }
                         });
                     }
                 });
 
             },
-            playQueue: function() {
+            playQueue: function () {
                 if (this.currentSong === null) {
                     var song = this.at(0);
                     this.currentSong = song.get('id');
@@ -133,12 +134,12 @@
                     }
                 }
             },
-            playNextSong: function() {
+            playNextSong: function () {
                 if (this.currentSong === null) {
                     this.playQueue();
                 } else {
                     var currentSong = app.queue.get({'id': app.queue.currentSong});
-                    var nextSongIndex = app.queue.indexOf(currentSong)+1;
+                    var nextSongIndex = app.queue.indexOf(currentSong) + 1;
                     var song = app.queue.at(nextSongIndex);
                     this.currentSong = song.get('id');
                     console.log(song);
@@ -149,12 +150,12 @@
                     this.audioPlayer.play();
                 }
             },
-            playPreviousSong: function() {
+            playPreviousSong: function () {
                 if (this.currentSong === null) {
                     this.playQueue();
                 } else {
                     var currentSong = app.queue.get({'id': app.queue.currentSong});
-                    var nextSongIndex = app.queue.indexOf(currentSong)-1;
+                    var nextSongIndex = app.queue.indexOf(currentSong) - 1;
                     var song = app.queue.at(nextSongIndex);
                     this.currentSong = song.get('id');
                     console.log(song);

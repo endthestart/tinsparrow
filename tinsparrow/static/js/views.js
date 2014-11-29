@@ -182,7 +182,7 @@
         initialize: function (options) {
             var self = this;
             TemplateView.prototype.initialize.apply(this, arguments);
-            app.collections.ready.done(function() {
+            app.collections.ready.done(function () {
                 app.queue.fetch({
                     success: $.proxy(self.render, self)
                 });

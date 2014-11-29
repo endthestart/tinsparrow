@@ -2,7 +2,7 @@ var app = (function ($) {
     var config = $('#config');
     var app = JSON.parse(config.text());
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         var router = new app.router();
     });
 
@@ -19,7 +19,7 @@ function playSongNow(songID) {
 function playSongNext(songID) {
     var song = app.queue.get({'id': app.queue.currentSong});
     console.log(song);
-    var nextLocation = app.queue.indexOf(song)+1;
+    var nextLocation = app.queue.indexOf(song) + 1;
     console.log(nextLocation);
     app.queue.add({'id': songID}, {'at': nextLocation});
     app.queue.save();
