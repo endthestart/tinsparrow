@@ -133,8 +133,7 @@
                     }
                 }
             },
-            playNextSong: function(event) {
-                console.log(event);
+            playNextSong: function() {
                 if (this.currentSong === null) {
                     this.playQueue();
                 } else {
@@ -150,8 +149,7 @@
                     this.audioPlayer.play();
                 }
             },
-            playPreviousSong: function(event) {
-                console.log(event);
+            playPreviousSong: function() {
                 if (this.currentSong === null) {
                     this.playQueue();
                 } else {
