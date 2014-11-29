@@ -54,11 +54,6 @@ class AlbumDetail(DefaultsMixin, generics.RetrieveAPIView):
 class SongList(DefaultsMixin, generics.ListAPIView):
     model = Song
     serializer_class = SongSerializer
-    #
-    # def list(self, request, *args, **kwargs):
-    #     queryset = Song.objects.all()
-    #     serializer = SongSerializer(queryset, many=True, context={'request': self.request})
-    #     return Response(serializer.data)
 
 
 class SongDetail(DefaultsMixin, generics.RetrieveAPIView):
@@ -99,7 +94,7 @@ class QueueList(DefaultsMixin, generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        # Ensure the Queue exists ... middleware?
+        # TODO: Ensure the Queue exists ... middleware?
         queue, created = Queue.objects.get_or_create(user=user)
         return queue.get_songs()
 
@@ -119,23 +114,3 @@ class QueueList(DefaultsMixin, generics.ListCreateAPIView):
                 except Song.DoesNotExist:
                     song = None
         return Response(song_json, status=status.HTTP_201_CREATED, headers={})
-    #
-    # def create(self, request, *args, **kwargs):
-    #     import pdb; pdb.set_trace()
-    #     serializer = self.get_serializer(data=request.DATA, files=request.FILES)
-    #
-    #     if serializer.is_valid():
-    #         self.pre_save(serializer.object)
-    #         self.object = serializer.save(force_insert=True)
-    #         self.post_save(self.object, created=True)
-    #         headers = self.get_success_headers(serializer.data)
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED,
-    #                         headers=headers)
-    #
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    #
-    # def get_success_headers(self, data):
-    #     try:
-    #         return {'Location': data[api_settings.URL_FIELD_NAME]}
-    #     except (TypeError, KeyError):
-    #         return {}
