@@ -1,4 +1,4 @@
-from .models import Artist, Album, Song, Queue
+from .models import Artist, Album, Song
 from rest_framework import serializers
 
 

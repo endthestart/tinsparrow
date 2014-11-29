@@ -29,6 +29,7 @@ class LibraryView(TemplateView):
         context = super(LibraryView, self).get_context_data(**kwargs)
         return context
 
+
 class LayoutView(TemplateView):
     template_name = "tinsparrow/layout.html"
 

@@ -112,5 +112,6 @@ class QueueList(DefaultsMixin, generics.ListCreateAPIView):
                     queue_song.save()
                     song_order += 1
                 except Song.DoesNotExist:
+                    # TODO: Unused, don't know what to do
                     song = None
         return Response(song_json, status=status.HTTP_201_CREATED, headers={})

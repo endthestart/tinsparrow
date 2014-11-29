@@ -92,7 +92,6 @@ class Importer(object):
                     # m.format = MP3
                     # m.type = mp3
 
-
                     missing_metadata = False
 
                     # TODO: Make this all into a nice dictionary
