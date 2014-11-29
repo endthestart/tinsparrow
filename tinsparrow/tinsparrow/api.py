@@ -108,7 +108,7 @@ class QueueList(DefaultsMixin, generics.ListCreateAPIView):
             for song_data in song_json:
                 try:
                     song = Song.objects.get(id=song_data.get('id'))
-                    queue_song = QueueSong(queue=queue, song=song, order=song_order);
+                    queue_song = QueueSong(queue=queue, song=song, order=song_order)
                     queue_song.save()
                     song_order += 1
                 except Song.DoesNotExist:
