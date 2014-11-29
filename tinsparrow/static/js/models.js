@@ -53,14 +53,7 @@
             return album.get('id') == this.get('album_id');
         }
     });
-    app.models.Queue = BaseModel.extend({
-        fetchSongs: function () {
-            var songs = this.get('songs');
-            if (songs) {
-                app.queue.fetch({url: songs, remove: false});
-            }
-        }
-    });
+    app.models.Queue = BaseModel.extend({});
 
     app.collections.ready = $.getJSON(app.apiRoot);
     app.collections.ready.done(function (data) {
@@ -86,15 +79,19 @@
             model: app.models.Song,
             url: data.queue,
             currentSong: null,
+            initialize: function () {
+                var self = this;
+                this.$player = $('#audio-player');
+                this.audioPlayer = this.$player.get(0);
+                //this.audioPlayer.addEventListener('ended', this.playNextSong(event));
+            },
             save: function(attributes, options) {
                 var queueData = {'song_list': JSON.stringify(this.toJSON())};
                 var self = this;
-                console.log(queueData);
                 $.ajax({
                     type:"POST",
                     url: data.queue,
                     data: queueData,
-                    success: function() {console.log('success...');},
                     dataType: "json",
                     crossDomain: false,
                     beforeSend: function(xhr, settings) {
@@ -103,7 +100,9 @@
                     success: function () {
                         self.fetch({
                             success: function () {
-                                self.playQueue();
+                                if (self.currentSong === null) {
+                                    self.playQueue();
+                                };
                             }
                         });
                     }
@@ -111,17 +110,31 @@
 
             },
             playQueue: function() {
-                this.fetch();
-                console.log(this);
-                this.$player = $('#audio-player');
-                this.audioPlayer = this.$player.get(0);
                 var song = this.at(0);
-                console.log(this.at(0).get('song_url'));
+                this.currentSong = song.get('id');
                 this.$player.empty().append(
                     '<source src="' + song.get('song_url') + '" type="' + song.get('content_type') + '">'
                 );
                 this.audioPlayer.load();
                 this.audioPlayer.play();
+            },
+            playNextSong: function(event) {
+                if (this.currentSong === null) {
+                    this.playQueue();
+                }
+                else {
+                    var currentSong = app.queue.get({'id': app.queue.currentSong});
+                    var nextSongIndex = app.queue.indexOf(currentSong)+1;
+                    var song = app.queue.at(nextSongIndex);
+                    this.currentSong = song.get('id');
+                    console.log(song);
+                    this.$player.empty().append(
+                        '<source src="' + song.get('song_url') + '" type="' + song.get('content_type') + '">'
+                    );
+                    this.audioPlayer.load();
+                    this.audioPlayer.play();
+                }
+
             }
         });
         app.queue = new app.collections.Queues();

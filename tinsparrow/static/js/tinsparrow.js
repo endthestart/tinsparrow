@@ -11,9 +11,24 @@ var app = (function ($) {
 
 function playSongNow(songID) {
     app.queue.reset();
+    app.queue.currentSong = null;
     app.queue.push({'id': songID});
     app.queue.save();
-    app.queue.playQueue();
+}
+
+function playSongNext(songID) {
+    var song = app.queue.get({'id': app.queue.currentSong});
+    console.log(song);
+    var nextLocation = app.queue.indexOf(song)+1;
+    console.log(nextLocation);
+    app.queue.add({'id': songID}, {'at': nextLocation});
+    app.queue.save();
+}
+
+function playSongLast(songID) {
+    console.log(songID);
+    app.queue.push({'id': songID});
+    app.queue.save();
 }
 
 function getCookie(name) {

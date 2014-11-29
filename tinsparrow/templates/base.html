@@ -65,7 +65,10 @@
             <tbody>
             <% _.each(songs.models, function(song) { %>
             <tr>
-                <td><a href="#songs" class="play-song" data-id="<%- song.get('id') %>" data-url="<%- song.get('song_url') %>" data-content-type="<%- song.get('content_type') %>"><%- song.get('title') %></a></td>
+                <td>
+                    <a href="#songs" class="play-song-now" data-id="<%- song.get('id') %>">now</a> -
+                    <a href="#songs" class="play-song-next" data-id="<%- song.get('id') %>">next</a> -
+                    <a href="#songs" class="play-song-last" data-id="<%- song.get('id') %>">last</a>&nbsp;<%- song.get('title') %></td>
                 <td><%- song.get('length') %></td>
                 <td><a href="#artists/<%- song.get('artist_id') %>"><%- song.get('artist') %></a></td>
                 <td><a href="#albums/<%- song.get('album_id') %>"><%- song.get('album') %></a></td>

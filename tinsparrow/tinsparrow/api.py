@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
-from .models import Artist, Album, Song, Queue
+from .models import Artist, Album, Song, Queue, QueueSong
 
 
 class DefaultsMixin(object):
@@ -101,7 +101,7 @@ class QueueList(DefaultsMixin, generics.ListCreateAPIView):
         user = self.request.user
         # Ensure the Queue exists ... middleware?
         queue, created = Queue.objects.get_or_create(user=user)
-        return queue.songs.all()
+        return queue.get_songs()
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
@@ -109,10 +109,13 @@ class QueueList(DefaultsMixin, generics.ListCreateAPIView):
         song_json = json.loads(self.request.POST.get('song_list', None))
         if song_json:
             queue.songs.clear()
+            song_order = 0
             for song_data in song_json:
                 try:
                     song = Song.objects.get(id=song_data.get('id'))
-                    queue.songs.add(song)
+                    queue_song = QueueSong(queue=queue, song=song, order=song_order);
+                    queue_song.save()
+                    song_order += 1
                 except Song.DoesNotExist:
                     song = None
         return Response(song_json, status=status.HTTP_201_CREATED, headers={})

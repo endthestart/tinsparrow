@@ -173,8 +173,34 @@ class Queue(models.Model):
         USER_MODULE_PATH
     )
     songs = models.ManyToManyField(
-        Song
+        Song,
+        through='QueueSong',
     )
+
+    def get_songs(self):
+        return [queuesong.song for queuesong in self.queuesong_set.all()]
 
     def __unicode__(self):
         return "{}'s Queue".format(self.user.username)
+
+
+class QueueSong(models.Model):
+    queue = models.ForeignKey(
+        Queue,
+    )
+    song = models.ForeignKey(
+        Song,
+    )
+    order = models.PositiveIntegerField(
+        _('order'),
+        default=0,
+        help_text=_("The order of the song in the queue"),
+    )
+
+    def __unicode__(self):
+        return "{} - {}".format(self.queue, self.song)
+
+    class Meta:
+        ordering = ('order', )
+        verbose_name = _("queue song")
+        verbose_name_plural = _("queue songs")

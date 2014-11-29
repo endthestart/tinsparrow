@@ -140,7 +140,9 @@
     var SongListView = TemplateView.extend({
         templateName: '#song-list-template',
         events: {
-            'click .play-song': 'playSongHandler'
+            'click .play-song-now': 'playSongHandler',
+            'click .play-song-next': 'playSongNextHandler',
+            'click .play-song-last': 'playSongLastHandler'
         },
         initialize: function (options) {
             var self = this;
@@ -155,21 +157,16 @@
             });
         },
         playSongHandler: function (event) {
-            console.log(event);
             var $song = $(event.target);
-            app.queue.reset();
-            app.queue.push({'id': $song.data('id')});
-            app.queue.save();
-            //var queuedSong = new app.models.Song({'id': $song.data('id')});
-            //app.queue.add(queuedSong);
-            //app.queue.save();
-            //console.log($song);
-            //console.log($song.data('url'));
-            //this.$player.empty().append(
-            //    '<source src="' + $song.data('url') + '" type="' + $song.data('content-type') + '">'
-            //);
-            //this.audioPlayer.load();
-            //this.audioPlayer.play();
+            playSongNow($song.data('id'));
+        },
+        playSongNextHandler: function (event) {
+            var $song = $(event.target);
+            playSongNext($song.data('id'));
+        },
+        playSongLastHandler: function (event) {
+            var $song = $(event.target);
+            playSongLast($song.data('id'));
         },
         getContext: function () {
             return {songs: app.songs || null}
