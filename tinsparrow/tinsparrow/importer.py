@@ -1,3 +1,4 @@
+import acoustid
 import logging
 import os
 
@@ -88,6 +89,7 @@ class Importer(object):
                         'title': None,
                         'track': None,
                     }
+                    duration, fingerprint = acoustid.fingerprint_file(media_file.path)
 
                     # m.format = MP3
                     # m.type = mp3
@@ -148,6 +150,7 @@ class Importer(object):
                             'track': media_dict['track'],
                             'content_type': CONTENT_TYPES.get(media_file.type, 'mp3'),
                             'length': media_file.length,
+                            'fingerprint': fingerprint,
                         }
                     )
 

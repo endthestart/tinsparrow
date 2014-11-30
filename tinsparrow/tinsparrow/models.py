@@ -72,6 +72,12 @@ class Song(models.Model):
         blank=True,
         help_text=_("The name of the file."),
     )
+    fingerprint = models.TextField(
+        _('fingerprint'),
+        blank=True,
+        null=True,
+        help_text=_("The AcoustID fingerprint of the audio file."),
+    )
     album = models.ForeignKey(
         Album,
         blank=True,
