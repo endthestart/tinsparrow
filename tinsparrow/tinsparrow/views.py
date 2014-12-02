@@ -1,10 +1,16 @@
 import os
 
+from django.contrib import messages
+from django.contrib.auth import logout as logout_user
+from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
+
 from django import http
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
 from .models import Song
+from .forms import LoginForm
 
 
 def songfile(request, song_id):
@@ -13,13 +19,25 @@ def songfile(request, song_id):
     return http.HttpResponse(song_data, content_type=song.content_type)
 
 
-class HomeView(TemplateView):
-    template_name = "tinsparrow/home.html"
+def login(request, template_name='login.html'):
+    if request.user.is_authenticated():
+        return redirect('/')
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.login(request):
+            messages.success(request, "You have successfully logged in.")
+            return redirect(request.POST.get('next', '/'))
+        else:
+            messages.error(request, "Your username and password do not match.")
+    else:
+        form = LoginForm()
+    return render_to_response(template_name, {'form': form, }, RequestContext(request))
 
-    def get_context_data(self, **kwargs):
-        context = super(HomeView, self).get_context_data(**kwargs)
-        # context['queue'] = Queue.objects.get_or_create(user=self.request.user)
-        return context
+
+def logout(request):
+    logout_user(request)
+    messages.success(request, "You have successfully logged out.")
+    return redirect('login')
 
 
 class LibraryView(TemplateView):

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 
-from .views import LibraryView, songfile, HomeView, LayoutView
+from .views import LibraryView, songfile, LayoutView
 from .api import api_root
 from .api import ArtistList, ArtistDetail
 from .api import AlbumList, AlbumDetail, ArtistAlbumList
@@ -47,7 +47,9 @@ urlpatterns = patterns(
     url(r'^library/', login_required(LibraryView.as_view()), name='library'),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^song/(?P<song_id>\d+)', songfile, name='song_file'),
-    url(r'^$', HomeView.as_view(), name='tinsparrow_home'),
+    url(r'^$', 'tinsparrow.views.login', name='home'),
+    url(r'^account/login/$', 'tinsparrow.views.login', name='login'),
+    url(r'^account/logout/$', 'tinsparrow.views.logout', name='logout'),
     url(r'^layout/$', LayoutView.as_view(), name='layout_view'),
     url(r'^admin/', include(admin.site.urls)),
 )
