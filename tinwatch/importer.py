@@ -1,10 +1,11 @@
 import acoustid
 import logging
 import os
-import sqlalchemy
+import utils
 
 from beets.mediafile import MediaFile, FileTypeError, UnreadableFileError
 
+from library import get_or_create, Song
 
 #LOSSY_MEDIA_FORMATS = ["mp3", "aac", "ogg", "ape", "m4a", "asf", "wma"]
 LOSSY_MEDIA_FORMATS = ["mp3", "ogg", "m4a"]
@@ -24,7 +25,7 @@ log = logging.getLogger(__name__)
 
 
 class Importer(object):
-    def set_common_album(items):
+    def set_common_album(self, items):
         changes = {}
         albumartist, freq = utils.plurality(
             [i.albumartist or i.artist for i in items]
@@ -41,7 +42,7 @@ class Importer(object):
 
         return items
 
-    def find_media(library):
+    def find_media(self, session, library):
         if not os.path.isdir(library.path):
             log.warning("Unable to find directory: '%s'", library.path)
             return
@@ -116,26 +117,11 @@ class Importer(object):
                         if not media_dict['title']:
                             media_dict['title'] = metadata.get('title', 'Unknown')
 
-                    artist, artist_created = Artist.objects.get_or_create(
-                        name=media_dict['artist']
-                    )
-                    # TODO: Should only need to do this once per folder/album
-                    album, album_created = Album.objects.get_or_create(
-                        artist=artist,
-                        title=media_dict['album']
-                    )
-                    song, song_created = Song.objects.get_or_create(
-                        path=os.path.dirname(media_file.path),
-                        filename=os.path.split(media_file.path)[1],
-                        defaults={
-                            'album': album,
-                            'artist': artist,
-                            'title': media_dict['title'],
-                            'track': media_dict['track'],
-                            'content_type': CONTENT_TYPES.get(media_file.type, 'mp3'),
-                            'length': media_file.length,
-                            'fingerprint': fingerprint,
-                        }
-                    )
-
-                    library.songs.add(song)
+                    song = get_or_create(session, Song, path=os.path.dirname(media_file.path), filename=os.path.split(media_file.path)[1])
+                    song.album = media_dict['album']
+                    song.artist = media_dict['artist']
+                    song.title = media_dict['title']
+                    song.track = media_dict['track']
+                    song.content_type = CONTENT_TYPES.get(media_file.type, 'mp3')
+                    song.length = media_file.length
+                    song.fingerprint = fingerprint
