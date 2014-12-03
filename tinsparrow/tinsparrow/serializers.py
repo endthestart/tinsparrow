@@ -3,8 +3,8 @@ from rest_framework import serializers
 
 
 class ArtistSerializer(serializers.HyperlinkedModelSerializer):
-    albums = serializers.HyperlinkedIdentityField('albums', view_name='artistalbum-list')
-    songs = serializers.HyperlinkedIdentityField('songs', view_name='artistsong-list')
+    # albums = serializers.HyperlinkedIdentityField('albums', view_name='artistalbum-list')
+    # songs = serializers.HyperlinkedIdentityField('songs', view_name='artistsong-list')
 
     class Meta:
         model = Artist
@@ -12,7 +12,7 @@ class ArtistSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class AlbumSerializer(serializers.ModelSerializer):
-    songs = serializers.HyperlinkedIdentityField('songs', view_name='albumsong-list')
+    # songs = serializers.HyperlinkedIdentityField('songs', view_name='albumsong-list')
 
     class Meta:
         model = Album

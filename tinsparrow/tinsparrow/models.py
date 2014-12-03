@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
 log = logging.getLogger(__name__)
@@ -78,14 +79,14 @@ class Song(models.Model):
         null=True,
         help_text=_("The AcoustID fingerprint of the audio file."),
     )
-    album = models.ForeignKey(
-        Album,
+    artist = models.ForeignKey(
+        Artist,
         blank=True,
         null=True,
         related_name='songs',
     )
-    artist = models.ForeignKey(
-        Artist,
+    album = models.ForeignKey(
+        Album,
         blank=True,
         null=True,
         related_name='songs',
@@ -138,20 +139,10 @@ class Song(models.Model):
 
 
 class Library(models.Model):
-    user = models.ForeignKey(
+    user = models.OneToOneField(
         USER_MODULE_PATH,
-        blank=True,
         null=True,
-    )
-    name = models.CharField(
-        _('name'),
-        max_length=255,
-        help_text=_("The name of the library."),
-    )
-    path = models.CharField(
-        _('path'),
-        max_length=255,
-        help_text=_("The absolute path of the library."),
+        blank=True,
     )
     songs = models.ManyToManyField(
         Song,
@@ -165,6 +156,14 @@ class Library(models.Model):
     @property
     def artists(self):
         return Artist.objects.filter(songs__in=self.songs).distinct()
+
+    @property
+    def name(self):
+        return "{}'s Library".format(self.user)
+
+    @property
+    def path(self):
+        return "{}{}".format(settings.LIBRARY_PATH, self.user)
 
     def __unicode__(self):
         return self.name
@@ -210,3 +209,12 @@ class QueueSong(models.Model):
         ordering = ('order', )
         verbose_name = _("queue song")
         verbose_name_plural = _("queue songs")
+
+
+def create_library(sender, **kwargs):
+    user = kwargs["instance"]
+    if kwargs["created"]:
+        library, created = Library.objects.get_or_create(user=user)
+        library.save()
+
+post_save.connect(create_library, sender=USER_MODULE_PATH)
