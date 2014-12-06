@@ -65,7 +65,7 @@ class SongFilter(django_filters.FilterSet):
 
     class Meta:
         model = Song
-        fields = ['fingerprint', 'artist', 'album']
+        fields = ['fingerprint', 'artist', 'album', 'title']
 
 
 class SongList(DefaultsMixin, generics.ListAPIView):

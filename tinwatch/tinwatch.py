@@ -16,11 +16,11 @@ from library import Library
 from importer import Importer
 from uploader import Uploader
 
-engine = create_engine('sqlite:///tinsparrow.db', echo=True)
+engine = create_engine('sqlite:///tinsparrow.db', echo=False)
 
 # TODO: This should become a configuration
 SCAN_ON_START = True
-LIBRARY_PATH = '/Users/manderson/Music'
+LIBRARY_PATH = '/var/music/andermic/'
 API_AUTH_URL = 'http://localhost:8000/api/token-auth/'
 
 def main():
@@ -42,8 +42,8 @@ def main():
 
     session.commit()
 
-    uploader = Uploader()
-    uploader.sync(session, token)
+    uploader = Uploader(token)
+    uploader.sync(session)
 
     session.commit()
 
@@ -63,7 +63,7 @@ def main():
     # observer.join()
 
 def login():
-    username = raw_input("Email: ")
+    username = raw_input("Username: ")
     password = getpass.getpass()
 
     return authenticate(username=username, password=password)
