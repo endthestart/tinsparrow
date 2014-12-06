@@ -1,4 +1,5 @@
 import json
+import django_filters
 
 from rest_framework import generics, permissions
 from rest_framework import status
@@ -58,20 +59,19 @@ class AlbumDetail(DefaultsMixin, generics.RetrieveAPIView):
     serializer_class = AlbumSerializer
 
 
-class SongList(DefaultsMixin, generics.ListCreateAPIView):
+class SongFilter(django_filters.FilterSet):
+    artist = django_filters.CharFilter(name="artist__name")
+    album = django_filters.CharFilter(name="album__name")
+
+    class Meta:
+        model = Song
+        fields = ['fingerprint', 'artist', 'album']
+
+
+class SongList(DefaultsMixin, generics.ListAPIView):
     model = Song
     serializer_class = SongSerializer
-
-    def post(self, request, *args, **kwargs):
-        user = self.request.user
-
-        # library = Library.objects.get(user=user)
-        import pdb; pdb.set_trace()
-        serializer = SongSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    filter_class = SongFilter
 
 
 class SongDetail(DefaultsMixin, generics.RetrieveAPIView):

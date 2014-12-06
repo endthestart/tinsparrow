@@ -167,7 +167,7 @@ class Library(models.Model):
 
     @property
     def path(self):
-        return os.path.join(settings.LIBRARY_PATH, self.user)
+        return os.path.join(settings.LIBRARY_PATH, self.user.username)
 
     def __unicode__(self):
         return self.name

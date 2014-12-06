@@ -22,6 +22,7 @@ CONTENT_TYPES = {
 SINGLE_ARTIST_THRESH = 0.25
 VARIOUS_ARTISTS = u'Various Artists'
 
+logging.basicConfig()
 log = logging.getLogger(__name__)
 
 

@@ -1,3 +1,5 @@
+import django_filters
+
 from .models import Artist, Album, Song
 from rest_framework import serializers
 
@@ -32,4 +34,4 @@ class SongSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Song
-        fields = ('id', 'artist_id', 'artist', 'album_id', 'album', 'title', 'length', 'song_url', 'content_type', )
+        fields = ('id', 'fingerprint', 'artist_id', 'artist', 'album_id', 'album', 'title', 'length', 'song_url', 'content_type', )
