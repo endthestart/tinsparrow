@@ -30,6 +30,13 @@ def api_root(request, format=None):
         'queue': reverse('queue-list', request=request, format=format)
     })
 
+@api_view(('POST', ))
+def song_upload(request, format=None):
+    if request.method == "POST":
+        return Response({
+            'status': "failure"
+        })
+
 
 class ArtistList(DefaultsMixin, generics.ListAPIView):
     model = Artist

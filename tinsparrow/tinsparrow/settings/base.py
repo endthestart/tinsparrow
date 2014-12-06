@@ -192,6 +192,7 @@ DJANGO_APPS = (
     # 'django.contrib.admindocs',
 
     'rest_framework',
+    'rest_framework.authtoken',
 )
 
 # Apps specific for this project go here.
@@ -248,6 +249,9 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (),
     'PAGINATE_BY': 10
 }

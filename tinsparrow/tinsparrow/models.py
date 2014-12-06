@@ -1,10 +1,14 @@
 import logging
+import os
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
+
+from rest_framework.authtoken.models import Token
+
 
 log = logging.getLogger(__name__)
 
@@ -163,7 +167,7 @@ class Library(models.Model):
 
     @property
     def path(self):
-        return "{}{}".format(settings.LIBRARY_PATH, self.user)
+        return os.path.join(settings.LIBRARY_PATH, self.user)
 
     def __unicode__(self):
         return self.name
@@ -212,9 +216,17 @@ class QueueSong(models.Model):
 
 
 def create_library(sender, **kwargs):
-    user = kwargs["instance"]
-    if kwargs["created"]:
+    user = kwargs['instance']
+    if kwargs['created']:
         library, created = Library.objects.get_or_create(user=user)
         library.save()
 
+
+def create_auth_token(sender, **kwargs):
+    user = kwargs['instance']
+    if kwargs['created']:
+        Token.objects.create(user=user)
+
+
 post_save.connect(create_library, sender=USER_MODULE_PATH)
+post_save.connect(create_auth_token, sender=USER_MODULE_PATH)

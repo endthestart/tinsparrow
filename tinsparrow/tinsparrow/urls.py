@@ -3,8 +3,10 @@ from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 
+from rest_framework.authtoken.views import obtain_auth_token
+
 from .views import LibraryView, songfile, LayoutView
-from .api import api_root
+from .api import api_root, song_upload
 from .api import ArtistList, ArtistDetail
 from .api import AlbumList, AlbumDetail, ArtistAlbumList
 from .api import SongList, SongDetail, ArtistSongList, AlbumSongList
@@ -40,10 +42,12 @@ queue_urls = patterns(
 urlpatterns = patterns(
     '',
     url(r'^api/$', api_root, name='api-root'),
+    url(r'^api/upload/$', song_upload, name='song-upload'),
     url(r'^api/artists', include(artist_urls)),
     url(r'^api/albums', include(album_urls)),
     url(r'^api/songs', include(song_urls)),
     url(r'^api/queue', include(queue_urls)),
+    url(r'^api/token-auth/', obtain_auth_token),
     url(r'^library/', login_required(LibraryView.as_view()), name='library'),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^song/(?P<song_id>\d+)', songfile, name='song_file'),

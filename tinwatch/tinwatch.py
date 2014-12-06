@@ -1,6 +1,10 @@
+import getpass
 import sys
 import time
 import logging
+
+import json
+import requests
 
 from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
@@ -17,9 +21,10 @@ engine = create_engine('sqlite:///tinsparrow.db', echo=True)
 # TODO: This should become a configuration
 SCAN_ON_START = True
 LIBRARY_PATH = '/Users/manderson/Music'
-
+API_AUTH_URL = 'http://localhost:8000/api/token-auth/'
 
 def main():
+    token = login()
     Session = sessionmaker()
     Session.configure(bind=engine)
     session = Session()
@@ -38,7 +43,7 @@ def main():
     session.commit()
 
     uploader = Uploader()
-    uploader.sync(session)
+    uploader.sync(session, token)
 
     session.commit()
 
@@ -56,6 +61,23 @@ def main():
     # except KeyboardInterrupt:
     #     observer.stop()
     # observer.join()
+
+def login():
+    username = raw_input("Email: ")
+    password = getpass.getpass()
+
+    return authenticate(username=username, password=password)
+
+
+def authenticate(username, password):
+    auth_r = requests.post(API_AUTH_URL, data={'username': username, 'password': password})
+    if auth_r.status_code == 200:
+        token_json = json.loads(auth_r.content)
+        token = token_json.get('token', None)
+        if token:
+            return token
+    else:
+        login()
 
 
 if __name__ == "__main__":

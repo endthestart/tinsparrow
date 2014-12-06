@@ -89,6 +89,7 @@ class Importer(object):
                         'title': None,
                         'track': None,
                     }
+                    # TODO: This should be a celery job
                     duration, fingerprint = acoustid.fingerprint_file(media_file.path)
 
                     # m.format = MP3
