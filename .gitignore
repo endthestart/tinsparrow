@@ -5,3 +5,4 @@ local_settings.py
 .idea
 .DS_Store
 tinsparrow/tinsparrow/default.db
+config.db

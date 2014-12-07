@@ -42,6 +42,6 @@ def get_or_create(session, model, **kwargs):
         instance = model(**kwargs)
         session.add(instance)
         return instance
-
-Base.metadata.drop_all(engine)
+#
+# Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)
