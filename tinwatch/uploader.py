@@ -5,8 +5,8 @@ import requests
 from urlparse import urljoin
 
 from library import Song
+from settings import *
 
-API_URL = 'http://localhost:8000/api/'
 
 class Uploader(object):
     def __init__(self, token):
