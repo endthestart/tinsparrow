@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
-from .models import Artist, Album, Library, Song, Queue, QueueSong
+from .models import Artist, Album, UserLibrary, Song, Queue, QueueSong
 
 
 class DefaultsMixin(object):
@@ -28,7 +28,8 @@ def api_root(request, format=None):
         'artists': reverse('artist-list', request=request, format=format),
         'albums': reverse('album-list', request=request, format=format),
         'songs': reverse('song-list', request=request, format=format),
-        'queue': reverse('queue-list', request=request, format=format)
+        'queue': reverse('queue-list', request=request, format=format),
+        'library': reverse('library-list', request=request, format=format)
     })
 
 @api_view(('POST', ))
@@ -104,6 +105,20 @@ class AlbumSongList(DefaultsMixin, generics.ListAPIView):
     def get_queryset(self):
         queryset = super(AlbumSongList, self).get_queryset()
         return queryset.filter(album=self.kwargs.get('pk'))
+
+
+class LibraryList(DefaultsMixin, generics.ListCreateAPIView):
+    model = Song
+    serializer_class = SongSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        library = UserLibrary.objects.get(user=user)
+        return library.songs.all()
+
+    def post(self, request, *args, **kwargs):
+        import pdb; pdb.set_trace()
+        return Response({}, status=status.HTTP_201_CREATED, headers={})
 
 
 class QueueList(DefaultsMixin, generics.ListCreateAPIView):

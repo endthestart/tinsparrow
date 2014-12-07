@@ -3,6 +3,7 @@ import os
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
@@ -142,7 +143,7 @@ class Song(models.Model):
         unique_together = ('path', 'filename')
 
 
-class Library(models.Model):
+class UserLibrary(models.Model):
     user = models.OneToOneField(
         USER_MODULE_PATH,
         null=True,
@@ -173,8 +174,31 @@ class Library(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _("library")
-        verbose_name_plural = _("libraries")
+        verbose_name = _("user library")
+        verbose_name_plural = _("user libraries")
+
+
+class Library(models.Model):
+    songs = models.ManyToManyField(
+        Song,
+    )
+
+    @property
+    def path(self):
+        return settings.LIBRARY_PATH
+
+    def clean(self):
+        validate_only_one_instance(self)
+
+    def __unicode__(self):
+        return "Master Library"
+
+
+# TODO: Move this to a utils
+def validate_only_one_instance(obj):
+    model = obj.__class__
+    if model.objects.count() > 0 and obj.id != model.objects.get().id:
+        raise ValidationError("Can only create 1 {} instance".format(model.__name__))
 
 
 class Queue(models.Model):
@@ -215,10 +239,10 @@ class QueueSong(models.Model):
         verbose_name_plural = _("queue songs")
 
 
-def create_library(sender, **kwargs):
+def create_user_library(sender, **kwargs):
     user = kwargs['instance']
     if kwargs['created']:
-        library, created = Library.objects.get_or_create(user=user)
+        library, created = UserLibrary.objects.get_or_create(user=user)
         library.save()
 
 
@@ -228,5 +252,5 @@ def create_auth_token(sender, **kwargs):
         Token.objects.create(user=user)
 
 
-post_save.connect(create_library, sender=USER_MODULE_PATH)
+post_save.connect(create_user_library, sender=USER_MODULE_PATH)
 post_save.connect(create_auth_token, sender=USER_MODULE_PATH)

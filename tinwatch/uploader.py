@@ -23,38 +23,82 @@ class Uploader(object):
         :param session:
         :return:
         """
-        url = urljoin(API_URL, 'upload/')
         songs = session.query(Song).filter_by(uploaded=False)
         for song in songs:
-            with open(os.path.join(song.path, song.filename)) as song_file:
-                files = {os.path.join(song.path, song.filename): song_file}
-                data = {
-                    'artist': song.artist,
-                    'album': song.album,
-                    'title': song.title,
-                    'track': song.track,
-                    'length': song.length,
-                }
-                match = self.match_fingerprint(song.fingerprint)
-                match_json = json.loads(match.content)
-                if match_json.get('count', False):
-                    # put the song into their library
-                    song.uploaded = True
+            # TODO: reorganize these if statements?
+            fingerprint_match, match_id = self.match_fingerprint(song.fingerprint)
+            if fingerprint_match:
+                self.add_song_id_to_library(match_id)
+            else:
+                metadata_match, match_id = self.match_metadata(song)
+                if metadata_match:
+                    self.add_song_id_to_library(match_id)
                 else:
-                    # We don't have a match, upload
-                    upload_request = requests.post(
-                        url,
-                        headers=self.headers,
-                        data=data,
-                        files=files
-                    )
-                    song.uploaded = True
-            # song.uploaded = True
+                    self.upload_song(song)
 
     def match_fingerprint(self, fingerprint):
+        # TODO: match fingerprint and metadata could be one method. If kwargs['fingerprint'] or if kwargs other data, etc.
+        match_found = False
+        match_id = None
+
         url = urljoin(API_URL, 'songs/')
         payload = {'fingerprint': fingerprint}
-        return requests.get(url, headers=self.headers, params=payload)
+        match = requests.get(url, headers=self.headers, params=payload)
+        match_json = json.loads(match.content)
 
-    def match_metadata(self):
+        if match_json.get('count') > 0:
+            match_found = True
+            match_id = match_json['results'][0]['id']
+
+        return match_found, match_id
+
+    def match_metadata(self, song):
+        match_found = False
+        match_id = None
+
+        url = urljoin(API_URL, 'songs/')
+        payload = {
+            'artist': song.artist,
+            'album': song.album,
+            'title': song.title,
+        }
+        match = requests.get(url, headers=self.headers, params=payload)
+        match_json = json.loads(match.content)
+
+        if match_json.get('count') > 0:
+            match_found = True
+            match_id = match_json['results'][0]['id']
+
+        return match_found, match_id
+
+    def add_song_id_to_library(self, song_id):
+        url = urljoin(API_URL, 'library/')
+        data = {
+            'id': song_id,
+        }
+        add_request = requests.post(
+            url,
+            headers=self.headers,
+            data=data
+        )
         return False
+
+    def upload_song(self, song):
+        url = urljoin(API_URL, 'upload/')
+        with open(os.path.join(song.path, song.filename)) as song_file:
+            files = {
+                os.path.join(song.path, song.filename): song_file
+            }
+            data = {
+                'artist': song.artist,
+                'album': song.album,
+                'title': song.title,
+                'track': song.track,
+                'length': song.length,
+            }
+            upload_request = requests.post(
+                url,
+                headers=self.headers,
+                data=data,
+                files=files
+            )

@@ -11,6 +11,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         importer = Importer()
-        libraries = Library.objects.all()
-        for library in libraries:
-            importer.find_media(library)
+        library, _ = Library.objects.get_or_create()
+        importer.find_media(library)

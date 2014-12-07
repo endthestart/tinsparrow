@@ -11,6 +11,7 @@ from .api import ArtistList, ArtistDetail
 from .api import AlbumList, AlbumDetail, ArtistAlbumList
 from .api import SongList, SongDetail, ArtistSongList, AlbumSongList
 from .api import QueueList
+from .api import LibraryList
 
 
 artist_urls = patterns(
@@ -39,6 +40,11 @@ queue_urls = patterns(
     url(r'^/$', QueueList.as_view(), name='queue-list'),
 )
 
+library_urls = patterns(
+    '',
+    url(r'^/$', LibraryList.as_view(), name='library-list'),
+)
+
 urlpatterns = patterns(
     '',
     url(r'^api/$', api_root, name='api-root'),
@@ -47,6 +53,7 @@ urlpatterns = patterns(
     url(r'^api/albums', include(album_urls)),
     url(r'^api/songs', include(song_urls)),
     url(r'^api/queue', include(queue_urls)),
+    url(r'^api/library', include(library_urls)),
     url(r'^api/token-auth/', obtain_auth_token),
     url(r'^library/', login_required(LibraryView.as_view()), name='library'),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
