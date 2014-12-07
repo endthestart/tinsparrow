@@ -26,6 +26,7 @@ class Uploader(object):
         songs = session.query(Song).filter_by(uploaded=False)
         for song in songs:
             # TODO: reorganize these if statements?
+            # TODO: Make a list of songs to add and songs to upload. Add all songs at once, upload one at a time.
             fingerprint_match, match_id = self.match_fingerprint(song.fingerprint)
             if fingerprint_match:
                 self.add_song_id_to_library(match_id)

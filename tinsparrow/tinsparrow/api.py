@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
-from .models import Artist, Album, UserLibrary, Song, Queue, QueueSong
+from .models import Artist, Album, Library, UserLibrary, Song, Queue, QueueSong
 
 
 class DefaultsMixin(object):
@@ -117,8 +117,22 @@ class LibraryList(DefaultsMixin, generics.ListCreateAPIView):
         return library.songs.all()
 
     def post(self, request, *args, **kwargs):
-        import pdb; pdb.set_trace()
-        return Response({}, status=status.HTTP_201_CREATED, headers={})
+        user = self.request.user
+        song_id = int(request.DATA.get('id'))
+        # TODO: make this less prone to failure if for some reason library does not exist
+        # TODO: Add fixture that loads the Library
+        library = Library.objects.get()
+        user_library = UserLibrary.objects.get(user=user)
+        print("Attempting to load song with ID: {}".format(song_id))
+        try:
+            song = library.songs.get(id=song_id)
+            user_library.songs.add(song)
+        except Song.DoesNotExist:
+            # TODO: Add logging
+            print("attempted adding song that doesn't exist")
+        return Response({
+            'results': [song_id]
+        }, status=status.HTTP_201_CREATED, headers={})
 
 
 class QueueList(DefaultsMixin, generics.ListCreateAPIView):
