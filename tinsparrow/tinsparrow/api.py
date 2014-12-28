@@ -32,6 +32,7 @@ def api_root(request, format=None):
         'library': reverse('library-list', request=request, format=format)
     })
 
+
 @api_view(('POST', ))
 def song_upload(request, format=None):
     if request.method == "POST":
@@ -41,7 +42,7 @@ def song_upload(request, format=None):
 
 
 class ArtistList(DefaultsMixin, generics.ListAPIView):
-    model = Artist
+    queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
 
 
@@ -51,12 +52,12 @@ class ArtistDetail(DefaultsMixin, generics.RetrieveAPIView):
 
 
 class AlbumList(DefaultsMixin, generics.ListAPIView):
-    model = Album
+    queryset = Album.objects.all()
     serializer_class = AlbumSerializer
 
 
 class AlbumDetail(DefaultsMixin, generics.RetrieveAPIView):
-    model = Album
+    queryset = Album.objects.all()
     serializer_class = AlbumSerializer
 
 
@@ -70,7 +71,7 @@ class SongFilter(django_filters.FilterSet):
 
 
 class SongList(DefaultsMixin, generics.ListAPIView):
-    model = Song
+    queryset = Song.objects.all()
     serializer_class = SongSerializer
     filter_class = SongFilter
 
@@ -118,7 +119,7 @@ class LibraryList(DefaultsMixin, generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         user = self.request.user
-        song_id = int(request.DATA.get('id'))
+        song_id = int(request.data.get('id'))
         # TODO: make this less prone to failure if for some reason library does not exist
         # TODO: Add fixture that loads the Library
         library = Library.objects.get()

@@ -70,8 +70,8 @@
                     <a href="#songs" class="play-song-next" data-id="<%- song.get('id') %>">next</a> -
                     <a href="#songs" class="play-song-last" data-id="<%- song.get('id') %>">last</a>&nbsp;<%- song.get('title') %></td>
                 <td><%- song.get('length') %></td>
-                <td><a href="#artists/<%- song.get('artist_id') %>"><%- song.get('artist') %></a></td>
-                <td><a href="#albums/<%- song.get('album_id') %>"><%- song.get('album') %></a></td>
+                <td><a href="#artists/<%- song.get('artist').id %>"><%- song.get('artist').name %></a></td>
+                <td><a href="#albums/<%- song.get('album').id %>"><%- song.get('album').title %></a></td>
             </tr>
             <% }); %>
             </tbody>
@@ -120,8 +120,8 @@
             <tr>
                 <td><a href="#" class="song"><%- song.get('title') %></a></td>
                 <td><a href="#" class="song"><%- song.get('length') %></a></td>
-                <td><a href="#" class="song"><%- song.get('artist') %></a></td>
-                <td><a href="#" class="song"><%- song.get('album') %></a></td>
+                <td><a href="#" class="song"><%- song.get('artist').name %></a></td>
+                <td><a href="#" class="song"><%- song.get('album').title %></a></td>
             </tr>
             </tbody>
             <% }); %>

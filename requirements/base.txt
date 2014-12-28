@@ -1,8 +1,9 @@
 Django==1.7.1
 bpython==0.13
 django-braces==1.4.0
+django-filter==0.9.1
 django-model-utils==2.0.3
-djangorestframework==2.4.4
+djangorestframework==3.0.2
 logutils==0.3.3
 mutagen==1.26
 watchdog==0.8.2
